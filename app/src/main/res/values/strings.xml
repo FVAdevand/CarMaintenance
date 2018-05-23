@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">CarMaintenance</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--DateUtils-->
+    <string name="formatter_date">dd/mm/yy</string>
+
+    <!--pref currency-->
+    <string name="hryvnia" translatable="false">UAH|₴</string>
+    <string name="dollar" translatable="false">USD|$</string>
+    <string name="euro" translatable="false">EUR|€</string>
+    <string name="ruble" translatable="false">RUB|₽</string>
+
+    <string-array name="currency">
+        <item>@string/hryvnia</item>
+        <item>@string/dollar</item>
+        <item>@string/euro</item>
+        <item>@string/ruble</item>
+    </string-array>
+
+    <!--pref volume units-->
+    <string name="litre">l</string>
+    <string name="gallon">gal</string>
+
+    <string-array name="volume_units">
+        <item>@string/litre</item>
+        <item>@string/gallon</item>
+    </string-array>
+
+    <!--pref distance units-->
+    <string name="kilometer">km</string>
+    <string name="mile">mi</string>
+
+    <string-array name="distance_units">
+        <item>@string/kilometer</item>
+        <item>@string/mile</item>
+    </string-array>
+    <string name="title_activity_edit_vehicle">EditVehicleActivity</string>
+
+</resources>
