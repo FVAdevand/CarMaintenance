@@ -16,11 +16,8 @@ import android.widget.TextView;
 import com.bumptech.glide.signature.MediaStoreSignature;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
-import ua.fvadevand.carmaintenance.firebase.Const;
 import ua.fvadevand.carmaintenance.firebase.FirebaseVehicle;
 import ua.fvadevand.carmaintenance.firebase.model.Vehicle;
 import ua.fvadevand.carmaintenance.managers.ShPrefManager;
@@ -37,8 +34,10 @@ import ua.fvadevand.carmaintenance.utilities.GlideApp;
  */
 public class VehicleFragment extends Fragment {
 
+//    private static final String LOG_TAG = VehicleFragment.class.getSimpleName();
+
     private OnVehicleItemListener mListener;
-    private String mDefaultVehicleId;
+    private String mCurrentVehicleId;
     private FirebaseRecyclerAdapter<Vehicle, VehicleViewHolder> mAdapter;
 
     public VehicleFragment() {
@@ -60,12 +59,7 @@ public class VehicleFragment extends Fragment {
         RecyclerView vehicleList = view.findViewById(R.id.vehicle_list);
         vehicleList.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        Query query = FirebaseDatabase.getInstance()
-                .getReference()
-                .child(userUid)
-                .child(Const.VEHICLE_REF);
+        Query query = FirebaseVehicle.getVehicleRef();
 
         FirebaseRecyclerOptions<Vehicle> options =
                 new FirebaseRecyclerOptions.Builder<Vehicle>()
@@ -73,11 +67,11 @@ public class VehicleFragment extends Fragment {
                         .setLifecycleOwner(this)
                         .build();
 
-        mDefaultVehicleId = ShPrefManager.getCurrentVehicleId(view.getContext());
+        mCurrentVehicleId = ShPrefManager.getCurrentVehicleId(view.getContext());
 
         mAdapter = new FirebaseRecyclerAdapter<Vehicle, VehicleViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull VehicleViewHolder holder, int position, @NonNull final Vehicle model) {
+            protected void onBindViewHolder(@NonNull final VehicleViewHolder holder, int position, @NonNull final Vehicle model) {
                 holder.mManufacturerView.setText(model.getManufacturer());
                 holder.mModelView.setText(model.getModel());
 
@@ -88,23 +82,27 @@ public class VehicleFragment extends Fragment {
                             .signature(new MediaStoreSignature("image/jpeg", photoTimestamp, 0))
                             .centerCrop()
                             .into(holder.mPhotoView);
+                } else {
+                    holder.mPhotoView.setImageResource(R.drawable.car_default_image);
                 }
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mListener.onClickVehicleItem(model.getId());
+                        int position = holder.getLayoutPosition();
+                        mListener.onClickVehicleItem(getVehicleId(position));
                     }
                 });
                 holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        mListener.onLongClickVehicleItem(model.getId());
+                        int position = holder.getLayoutPosition();
+                        mListener.onLongClickVehicleItem(getVehicleId(position));
                         return false;
                     }
                 });
 
-                if (model.getId().equals(mDefaultVehicleId)) {
+                if (model.getId().equals(mCurrentVehicleId)) {
                     holder.mStarView.setImageResource(android.R.drawable.star_on);
                 } else {
                     holder.mStarView.setImageResource(android.R.drawable.star_off);
@@ -113,9 +111,14 @@ public class VehicleFragment extends Fragment {
                 holder.mStarView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        updateDefaultVehicle(model.getId());
+                        updateCurrentVehicle(model.getId());
+                        mListener.onChangeCurrentVehicle(holder.getLayoutPosition());
                     }
                 });
+            }
+
+            private String getVehicleId(int position) {
+                return getItem(position).getId();
             }
 
 
@@ -148,10 +151,9 @@ public class VehicleFragment extends Fragment {
         mListener = null;
     }
 
-    private void updateDefaultVehicle(String defaultVehicleId) {
-        mDefaultVehicleId = defaultVehicleId;
+    private void updateCurrentVehicle(String currentVehicleId) {
+        mCurrentVehicleId = currentVehicleId;
         mAdapter.notifyDataSetChanged();
-        mListener.onChangeDefaultVehicle(defaultVehicleId);
     }
 
     public interface OnVehicleItemListener {
@@ -159,7 +161,7 @@ public class VehicleFragment extends Fragment {
 
         void onLongClickVehicleItem(String vehicleId);
 
-        void onChangeDefaultVehicle(String vehicleId);
+        void onChangeCurrentVehicle(int position);
     }
 
     public static class VehicleViewHolder extends RecyclerView.ViewHolder {
@@ -175,8 +177,7 @@ public class VehicleFragment extends Fragment {
             mPhotoView = itemView.findViewById(R.id.iv_vehicle_photo);
             mManufacturerView = itemView.findViewById(R.id.tv_vehicle_manufacturer);
             mModelView = itemView.findViewById(R.id.tv_vehicle_model);
-            mStarView = itemView.findViewById(R.id.iv_default_vehicle_star);
-
+            mStarView = itemView.findViewById(R.id.iv_current_vehicle_star);
         }
     }
 

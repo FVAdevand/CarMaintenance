@@ -54,7 +54,7 @@ public class FirebaseVehicle {
         Log.i(LOG_TAG, "uploadPhotoVehicle: upload");
     }
 
-    private static DatabaseReference getVehicleRef() {
+    public static DatabaseReference getVehicleRef() {
         return FirebaseDatabase.getInstance()
                 .getReference()
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())

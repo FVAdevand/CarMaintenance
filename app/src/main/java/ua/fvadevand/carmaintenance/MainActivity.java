@@ -15,8 +15,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Spinner;
 
 import com.bumptech.glide.signature.MediaStoreSignature;
 import com.firebase.ui.auth.AuthUI;
@@ -27,8 +28,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import ua.fvadevand.carmaintenance.adapters.VehicleArrayAdapter;
 import ua.fvadevand.carmaintenance.dialogs.AlertDeleteDialogFragment;
 import ua.fvadevand.carmaintenance.firebase.Const;
 import ua.fvadevand.carmaintenance.firebase.FirebaseVehicle;
@@ -49,11 +53,10 @@ public class MainActivity extends AppCompatActivity
     private String mDeletedVehicleId;
     private String mCurrentVehicleId;
     private ImageView mBackgroundNavBar;
-    private TextView mModelVehicleNavBar;
+    private List<Vehicle> mVehicleList;
+    private VehicleArrayAdapter mSpinnerAdapter;
+    private Spinner mSpinnerVehicleModel;
 
-//    private FirebaseAuth mAuth;
-//    private FirebaseUser mUser;
-//    private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mVehicleList = new ArrayList<>();
 
         mFab = findViewById(R.id.fab_edit_vehicle);
 
@@ -75,21 +80,34 @@ public class MainActivity extends AppCompatActivity
 
         View headerView = navigationView.getHeaderView(0);
         mBackgroundNavBar = headerView.findViewById(R.id.iv_background_main_nav_bar);
-        mModelVehicleNavBar = headerView.findViewById(R.id.tv_vehicle_model_nav_bar);
-
-
-//        mAuth = FirebaseAuth.getInstance();
+        mSpinnerVehicleModel = headerView.findViewById(R.id.spinner_vehicle_model_nav_bar);
 
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             startSignInActivity();
         } else {
+            fetchVehicleList();
             Log.i(LOG_TAG, "onCreate: ");
         }
 
-        mCurrentVehicleId = ShPrefManager.getCurrentVehicleId(this);
+        mSpinnerAdapter = new VehicleArrayAdapter(this, mVehicleList);
+        mSpinnerVehicleModel.setAdapter(mSpinnerAdapter);
+        mSpinnerVehicleModel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                onChangeCurrentVehicle(position);
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
+        mCurrentVehicleId = ShPrefManager.getCurrentVehicleId(this);
         if (mCurrentVehicleId != null) {
-            getDefaultVehicle();
+            fetchCurrentVehicle();
         }
     }
 
@@ -173,6 +191,7 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == RC_SIGN_IN)
             Log.i(LOG_TAG, "onActivityResult: " + resultCode);
         if (resultCode == RESULT_OK) {
+            fetchVehicleList();
             Log.i(LOG_TAG, "onActivityResult: RESULT_OK");
         } else {
             finish();
@@ -199,10 +218,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onChangeDefaultVehicle(String vehicleId) {
-        ShPrefManager.setCurrentVehicleId(this, vehicleId);
-        mCurrentVehicleId = vehicleId;
-        getDefaultVehicle();
+    public void onChangeCurrentVehicle(int position) {
+        Vehicle currentVehicle = mVehicleList.get(position);
+        mCurrentVehicleId = currentVehicle.getId();
+        ShPrefManager.setCurrentVehicleId(this, mCurrentVehicleId);
+        mSpinnerVehicleModel.setSelection(position);
+        displayVehicle(currentVehicle);
     }
 
     @Override
@@ -247,10 +268,9 @@ public class MainActivity extends AppCompatActivity
         } else {
             mBackgroundNavBar.setImageResource(R.drawable.default_background_nav_bar);
         }
-        mModelVehicleNavBar.setText(vehicle.getModel());
     }
 
-    private void getDefaultVehicle() {
+    private void fetchCurrentVehicle() {
         FirebaseVehicle.getCurrentVehicleRef(mCurrentVehicleId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -266,5 +286,23 @@ public class MainActivity extends AppCompatActivity
 
                     }
                 });
+    }
+
+    private void fetchVehicleList() {
+        FirebaseVehicle.getVehicleRef().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot vehicleSnapshot : dataSnapshot.getChildren()) {
+                    Vehicle vehicle = vehicleSnapshot.getValue(Vehicle.class);
+                    mVehicleList.add(vehicle);
+                }
+                mSpinnerAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }
