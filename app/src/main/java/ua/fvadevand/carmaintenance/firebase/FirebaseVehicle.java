@@ -2,9 +2,7 @@ package ua.fvadevand.carmaintenance.firebase;
 
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -15,8 +13,6 @@ import java.util.Calendar;
 import ua.fvadevand.carmaintenance.firebase.model.Vehicle;
 
 public class FirebaseVehicle {
-
-    private static final String LOG_TAG = FirebaseVehicle.class.getSimpleName();
 
     private FirebaseVehicle() {
     }
@@ -51,20 +47,19 @@ public class FirebaseVehicle {
 
     private static void uploadPhotoVehicle(Uri photoUri, String vehicleId) {
         getPhotoVehicleRef().child(vehicleId).putFile(photoUri);
-        Log.i(LOG_TAG, "uploadPhotoVehicle: upload");
     }
 
     public static DatabaseReference getVehicleRef() {
         return FirebaseDatabase.getInstance()
                 .getReference()
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .child(Const.VEHICLE_REF);
+                .child(Firebase.getUid())
+                .child(Firebase.VEHICLE_REF);
     }
 
     private static StorageReference getPhotoVehicleRef() {
         return FirebaseStorage.getInstance()
                 .getReference()
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .child(Const.VEHICLE_PHOTO_REF);
+                .child(Firebase.getUid())
+                .child(Firebase.VEHICLE_PHOTO_REF);
     }
 }

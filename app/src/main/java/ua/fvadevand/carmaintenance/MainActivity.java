@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -34,9 +35,10 @@ import java.util.List;
 
 import ua.fvadevand.carmaintenance.adapters.VehicleArrayAdapter;
 import ua.fvadevand.carmaintenance.dialogs.AlertDeleteDialogFragment;
-import ua.fvadevand.carmaintenance.firebase.Const;
+import ua.fvadevand.carmaintenance.firebase.Firebase;
 import ua.fvadevand.carmaintenance.firebase.FirebaseVehicle;
 import ua.fvadevand.carmaintenance.firebase.model.Vehicle;
+import ua.fvadevand.carmaintenance.interfaces.OnSetCurrentVehicleListener;
 import ua.fvadevand.carmaintenance.managers.ShPrefManager;
 import ua.fvadevand.carmaintenance.utilities.GlideApp;
 
@@ -56,6 +58,8 @@ public class MainActivity extends AppCompatActivity
     private List<Vehicle> mVehicleList;
     private VehicleArrayAdapter mSpinnerAdapter;
     private Spinner mSpinnerVehicleModel;
+
+    private OnSetCurrentVehicleListener mListener;
 
 
     @Override
@@ -94,6 +98,9 @@ public class MainActivity extends AppCompatActivity
         mSpinnerVehicleModel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (mListener != null) {
+                    mListener.onSetCurrentVehicle(mVehicleList.get(position).getId());
+                }
                 onChangeCurrentVehicle(position);
             }
 
@@ -206,7 +213,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onClickVehicleItem(String vehicleId) {
         Intent activityIntent = new Intent(this, EditVehicleActivity.class);
-        activityIntent.putExtra(Const.KEY_VEHICLE_ID, vehicleId);
+        activityIntent.putExtra(Firebase.KEY_VEHICLE_ID, vehicleId);
         startActivity(activityIntent);
     }
 
@@ -232,9 +239,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showRefuelingFragment() {
+        Fragment refuelingFragment = RefuelingFragment.newInstance();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, RefuelingFragment.newInstance())
+                .replace(R.id.fragment_container, refuelingFragment)
                 .commit();
+        setListener(refuelingFragment);
         mFab.setImageResource(R.drawable.ic_action_add);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -245,9 +254,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showVehicleFragment() {
+        Fragment vehicleFragment = VehicleFragment.newInstance();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, VehicleFragment.newInstance())
+                .replace(R.id.fragment_container, vehicleFragment)
                 .commit();
+        setListener(vehicleFragment);
         mFab.setImageResource(R.drawable.ic_action_add);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -305,4 +316,14 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
+
+    private void setListener(Fragment fragment) {
+        if (fragment instanceof OnSetCurrentVehicleListener) {
+            mListener = (OnSetCurrentVehicleListener) fragment;
+        } else {
+            throw new RuntimeException(fragment.toString()
+                    + " must implement OnSetCurrentVehicleListener");
+        }
+    }
+
 }

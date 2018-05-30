@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +14,12 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
-import ua.fvadevand.carmaintenance.firebase.Const;
+import ua.fvadevand.carmaintenance.firebase.FirebaseRefueling;
 import ua.fvadevand.carmaintenance.firebase.model.Refueling;
+import ua.fvadevand.carmaintenance.interfaces.OnSetCurrentVehicleListener;
+import ua.fvadevand.carmaintenance.managers.ShPrefManager;
 import ua.fvadevand.carmaintenance.utilities.DateUtils;
 import ua.fvadevand.carmaintenance.utilities.TextFormatUtils;
 
@@ -34,59 +32,42 @@ import ua.fvadevand.carmaintenance.utilities.TextFormatUtils;
  * Use the {@link RefuelingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RefuelingFragment extends Fragment {
+public class RefuelingFragment extends Fragment
+        implements OnSetCurrentVehicleListener {
 
     private static final String LOG_TAG = RefuelingFragment.class.getSimpleName();
 
-    //    private static final String ARG_PARAM1 = "param1";
-//    private static final String ARG_PARAM2 = "param2";
-//
-//    private String mParam1;
-//    private String mParam2;
-
     private OnClickRefuelingItemListener mListener;
+    private String mCurrentVehicleId;
+    private RecyclerView mRefuelingListView;
 
     public RefuelingFragment() {
     }
 
     public static RefuelingFragment newInstance() {
-        RefuelingFragment fragment = new RefuelingFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-        return fragment;
+        return new RefuelingFragment();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.i(LOG_TAG, "onCreateView: cretae fragment");
         return inflater.inflate(R.layout.fragment_refueling, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        RecyclerView refuelingListView = view.findViewById(R.id.refueling_list);
-        refuelingListView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mCurrentVehicleId = ShPrefManager.getCurrentVehicleId(view.getContext());
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        mRefuelingListView = view.findViewById(R.id.refueling_list);
+        mRefuelingListView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        Query query = FirebaseDatabase.getInstance()
-                .getReference()
-                .child(user.getUid())
-                .child(Const.REFUELING_REF)
-                .child(Const.CURRENT_CAR);
+        mRefuelingListView.setHasFixedSize(true);
+        mRefuelingListView.setAdapter(getAdapter());
+    }
+
+    private FirebaseRecyclerAdapter<Refueling, RefuelingViewHolder> getAdapter() {
+        Query query = FirebaseRefueling.getCurVehRefuelingRef(mCurrentVehicleId);
 
         FirebaseRecyclerOptions<Refueling> options =
                 new FirebaseRecyclerOptions.Builder<Refueling>()
@@ -94,41 +75,30 @@ public class RefuelingFragment extends Fragment {
                         .setLifecycleOwner(this)
                         .build();
 
-        FirebaseRecyclerAdapter<Refueling, RefuelingViewHolder> adapter =
-                new FirebaseRecyclerAdapter<Refueling, RefuelingViewHolder>(options) {
+        return new FirebaseRecyclerAdapter<Refueling, RefuelingViewHolder>(options) {
 
-                    @Override
-                    protected void onBindViewHolder(@NonNull RefuelingViewHolder holder, int position, @NonNull Refueling model) {
-                        Context context = view.getContext();
-                        String date = DateUtils.formatDate(context, model.getTimeStamp());
-                        holder.mDateView.setText(date);
-                        holder.mCoastView.setText(TextFormatUtils.coastFormat(model.getCoast()));
-                        holder.mOdometrView.setText(TextFormatUtils.odometrFormat(model.getOdometr()));
-                        holder.mDistanceView.setText(TextFormatUtils.distanceFormat(model.getDistance()));
-                        holder.mVolumeView.setText(TextFormatUtils.volumeFormat(model.getVolume()));
-                        holder.mGasStationView.setText(model.getGasStation());
-                        holder.mBrandFuelView.setText(model.getBrandFuel());
-                        holder.mPriceUnitView.setText(TextFormatUtils.priceUnitFormat(model.getPriceUnit()));
-                    }
+            @Override
+            protected void onBindViewHolder(@NonNull RefuelingViewHolder holder, int position, @NonNull Refueling model) {
+                String date = DateUtils.formatDate(RefuelingFragment.this.getContext(), model.getTimeStamp());
+                holder.mDateView.setText(date);
+                holder.mCoastView.setText(TextFormatUtils.coastFormat(model.getCoast()));
+                holder.mOdometrView.setText(TextFormatUtils.odometrFormat(model.getOdometr()));
+                holder.mDistanceView.setText(TextFormatUtils.distanceFormat(model.getDistance()));
+                holder.mVolumeView.setText(TextFormatUtils.volumeFormat(model.getVolume()));
+                holder.mGasStationView.setText(model.getGasStation());
+                holder.mBrandFuelView.setText(model.getBrandFuel());
+                holder.mPriceUnitView.setText(TextFormatUtils.priceUnitFormat(model.getPriceUnit()));
+            }
 
-                    @NonNull
-                    @Override
-                    public RefuelingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                        View v = LayoutInflater.from(parent.getContext())
-                                .inflate(R.layout.refueling_list_item, parent, false);
-                        return new RefuelingViewHolder(v);
-                    }
-                };
-
-        refuelingListView.setHasFixedSize(true);
-        refuelingListView.setAdapter(adapter);
+            @NonNull
+            @Override
+            public RefuelingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.refueling_list_item, parent, false);
+                return new RefuelingViewHolder(v);
+            }
+        };
     }
-
-    //    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onClickRefuelingItem(uri);
-//        }
-//    }
 
     @Override
     public void onAttach(Context context) {
@@ -147,6 +117,12 @@ public class RefuelingFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onSetCurrentVehicle(String currentVehicleId) {
+        mCurrentVehicleId = currentVehicleId;
+        mRefuelingListView.setAdapter(getAdapter());
+    }
+
     public interface OnClickRefuelingItemListener {
         void onClickRefuelingItem(int position);
     }
@@ -162,7 +138,7 @@ public class RefuelingFragment extends Fragment {
         TextView mBrandFuelView;
         TextView mPriceUnitView;
 
-        public RefuelingViewHolder(View itemView) {
+        RefuelingViewHolder(View itemView) {
             super(itemView);
 
             mDateView = itemView.findViewById(R.id.tv_refueling_date);

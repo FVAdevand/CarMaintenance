@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import ua.fvadevand.carmaintenance.firebase.Const;
+import ua.fvadevand.carmaintenance.firebase.Firebase;
 
 public class EditVehicleActivity extends AppCompatActivity
         implements EditVehicleFragment.OnEditVehicleListener {
@@ -27,7 +27,7 @@ public class EditVehicleActivity extends AppCompatActivity
         String vehicleId = null;
 
         if (getIntent().getExtras() != null) {
-            vehicleId = getIntent().getStringExtra(Const.KEY_VEHICLE_ID);
+            vehicleId = getIntent().getStringExtra(Firebase.KEY_VEHICLE_ID);
         }
 
         EditVehicleFragment fragment = EditVehicleFragment.newInstance(vehicleId);

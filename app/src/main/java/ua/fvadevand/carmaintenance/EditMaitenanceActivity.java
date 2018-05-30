@@ -10,15 +10,14 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
 
-import ua.fvadevand.carmaintenance.firebase.Const;
+import ua.fvadevand.carmaintenance.firebase.FirebaseRefueling;
 import ua.fvadevand.carmaintenance.firebase.model.Refueling;
+import ua.fvadevand.carmaintenance.managers.ShPrefManager;
 
 public class EditMaitenanceActivity extends AppCompatActivity {
 
@@ -35,11 +34,8 @@ public class EditMaitenanceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_maitenance);
 
-        mUser = FirebaseAuth.getInstance().getCurrentUser();
-        mRefuelingRef = FirebaseDatabase.getInstance().getReference()
-                .child(mUser.getUid())
-                .child(Const.REFUELING_REF)
-                .child(Const.CURRENT_CAR);
+        String currentVehicleId = ShPrefManager.getCurrentVehicleId(this);
+        mRefuelingRef = FirebaseRefueling.getCurVehRefuelingRef(currentVehicleId);
 
         mVolumeView = findViewById(R.id.et_edit_volume);
         mPriceUnitView = findViewById(R.id.et_edit_price_unit);

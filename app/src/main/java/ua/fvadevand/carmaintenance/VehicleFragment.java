@@ -20,6 +20,7 @@ import com.google.firebase.database.Query;
 
 import ua.fvadevand.carmaintenance.firebase.FirebaseVehicle;
 import ua.fvadevand.carmaintenance.firebase.model.Vehicle;
+import ua.fvadevand.carmaintenance.interfaces.OnSetCurrentVehicleListener;
 import ua.fvadevand.carmaintenance.managers.ShPrefManager;
 import ua.fvadevand.carmaintenance.utilities.GlideApp;
 
@@ -32,7 +33,8 @@ import ua.fvadevand.carmaintenance.utilities.GlideApp;
  * Use the {@link VehicleFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class VehicleFragment extends Fragment {
+public class VehicleFragment extends Fragment
+        implements OnSetCurrentVehicleListener {
 
 //    private static final String LOG_TAG = VehicleFragment.class.getSimpleName();
 
@@ -111,7 +113,7 @@ public class VehicleFragment extends Fragment {
                 holder.mStarView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        updateCurrentVehicle(model.getId());
+                        onSetCurrentVehicle(model.getId());
                         mListener.onChangeCurrentVehicle(holder.getLayoutPosition());
                     }
                 });
@@ -131,6 +133,7 @@ public class VehicleFragment extends Fragment {
             }
         };
 
+        vehicleList.setHasFixedSize(true);
         vehicleList.setAdapter(mAdapter);
     }
 
@@ -151,7 +154,8 @@ public class VehicleFragment extends Fragment {
         mListener = null;
     }
 
-    private void updateCurrentVehicle(String currentVehicleId) {
+    @Override
+    public void onSetCurrentVehicle(String currentVehicleId) {
         mCurrentVehicleId = currentVehicleId;
         mAdapter.notifyDataSetChanged();
     }
@@ -165,7 +169,6 @@ public class VehicleFragment extends Fragment {
     }
 
     public static class VehicleViewHolder extends RecyclerView.ViewHolder {
-
         ImageView mPhotoView;
         ImageView mStarView;
         TextView mManufacturerView;
@@ -180,6 +183,4 @@ public class VehicleFragment extends Fragment {
             mStarView = itemView.findViewById(R.id.iv_current_vehicle_star);
         }
     }
-
-
 }
