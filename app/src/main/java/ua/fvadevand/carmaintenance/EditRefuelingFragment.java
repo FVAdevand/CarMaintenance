@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
@@ -27,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Calendar;
 
 import ua.fvadevand.carmaintenance.dialogs.DatePickerDialogFragment;
+import ua.fvadevand.carmaintenance.dialogs.SetInfoDialogFragment;
 import ua.fvadevand.carmaintenance.firebase.FirebaseRefueling;
 import ua.fvadevand.carmaintenance.firebase.model.Refueling;
 import ua.fvadevand.carmaintenance.utilities.CalculationUtils;
@@ -41,7 +43,8 @@ import ua.fvadevand.carmaintenance.utilities.TextFormatUtils;
  */
 public class EditRefuelingFragment extends Fragment
         implements View.OnClickListener,
-        DatePickerDialog.OnDateSetListener {
+        DatePickerDialog.OnDateSetListener,
+        SetInfoDialogFragment.OnClickPositiveInfoDialogListener {
 
     private static final String LOG_TAG = EditRefuelingFragment.class.getSimpleName();
     private static final String KEY_CURRENT_VEHICLE_ID = "CURRENT_VEHICLE_ID";
@@ -159,6 +162,8 @@ public class EditRefuelingFragment extends Fragment
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ibtn_add_fuel_brand:
+                DialogFragment dialog = new SetInfoDialogFragment();
+                dialog.show(getChildFragmentManager(), "dialog_add_fuel_brand");
                 break;
             case R.id.ibtn_add_gas_station:
                 break;
@@ -405,5 +410,10 @@ public class EditRefuelingFragment extends Fragment
     private void setError(EditText view, String errorMsg) {
         view.setError(errorMsg);
         view.requestFocus();
+    }
+
+    @Override
+    public void onClickPositiveInfoDialog(String info) {
+
     }
 }
