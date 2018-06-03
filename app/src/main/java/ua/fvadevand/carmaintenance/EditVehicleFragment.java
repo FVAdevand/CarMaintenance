@@ -52,7 +52,7 @@ public class EditVehicleFragment extends Fragment
 
     private EditText mManufacturerView;
     private EditText mModelView;
-    private EditText mInitialOdometrView;
+    private EditText mInitialOdometerView;
     private EditText mYearManufacturerView;
     private List<EditText> mEditTextList;
     private ImageView mToolbarImageView;
@@ -98,14 +98,14 @@ public class EditVehicleFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
 
         mManufacturerView = view.findViewById(R.id.et_vehicle_manufacturer);
-        mModelView = view.findViewById(R.id.et_vehicle_model);
-        mInitialOdometrView = view.findViewById(R.id.et_vehicle_initial_odometr);
+        mModelView = view.findViewById(R.id.et_edit_refueling_odometer);
+        mInitialOdometerView = view.findViewById(R.id.et_vehicle_initial_odometr);
         mYearManufacturerView = view.findViewById(R.id.et_vehicle_year_manufacture);
 
         mEditTextList = new ArrayList<>();
         mEditTextList.add(mManufacturerView);
         mEditTextList.add(mModelView);
-        mEditTextList.add(mInitialOdometrView);
+        mEditTextList.add(mInitialOdometerView);
         mEditTextList.add(mYearManufacturerView);
 
         FragmentActivity activity = getActivity();
@@ -182,7 +182,6 @@ public class EditVehicleFragment extends Fragment
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
@@ -190,7 +189,6 @@ public class EditVehicleFragment extends Fragment
             case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
                 CropImage.ActivityResult result = CropImage.getActivityResult(data);
                 mPhotoVehicleUri = result.getUri();
-//                Glide.with(this).load(mPhotoVehicleUri).into(mToolbarImageView);
                 setPic(mToolbarImageView, mPhotoVehicleUri.getEncodedPath());
                 break;
         }
@@ -220,9 +218,9 @@ public class EditVehicleFragment extends Fragment
         mCurrentVehicle.setManufacturer(mManufacturerView.getText().toString().trim());
         mCurrentVehicle.setModel(modelVehicle);
 
-        String initialOdometrStr = mInitialOdometrView.getText().toString();
-        if (!TextUtils.isEmpty(initialOdometrStr)) {
-            mCurrentVehicle.setInitialOdometr(Integer.parseInt(initialOdometrStr));
+        String initialOdometerStr = mInitialOdometerView.getText().toString();
+        if (!TextUtils.isEmpty(initialOdometerStr)) {
+            mCurrentVehicle.setInitialOdometr(Integer.parseInt(initialOdometerStr));
         }
 
         mCurrentVehicle.setYearManufacture(mYearManufacturerView.getText().toString());
@@ -236,7 +234,7 @@ public class EditVehicleFragment extends Fragment
         mManufacturerView.setText(vehicle.getManufacturer());
         mModelView.setText(vehicle.getModel());
         mYearManufacturerView.setText(vehicle.getYearManufacture());
-        mInitialOdometrView.setText(String.format(Locale.getDefault(), "%d", vehicle.getInitialOdometr()));
+        mInitialOdometerView.setText(String.format(Locale.getDefault(), "%d", vehicle.getInitialOdometr()));
         long photoTimestamp = vehicle.getPhotoTimestamp();
         if (photoTimestamp > 0) {
             GlideApp.with(this)

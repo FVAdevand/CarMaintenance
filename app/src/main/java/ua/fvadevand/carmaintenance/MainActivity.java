@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, EditMaitenanceActivity.class));
+                startActivity(new Intent(MainActivity.this, EditMaintenanceActivity.class));
             }
         });
     }

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditRefuelingFragment">
+
+    <ImageView
+        android:id="@+id/iv_description_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:contentDescription="@string/description_edit_refueling_date"
+        android:src="@drawable/ic_calendar_24"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_edit_refueling_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_edit_refueling_date" />
+
+    <TextView
+        android:id="@+id/tv_edit_refueling_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:paddingEnd="2dp"
+        android:paddingStart="2dp"
+        android:textColor="@android:color/primary_text_light"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_description_date"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="15.05.2018" />
+
+    <ImageView
+        android:id="@+id/iv_description_odometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/description_edit_refueling_odometer"
+        android:src="@drawable/ic_odometer_24"
+        app:layout_constraintBottom_toBottomOf="@+id/til_edit_refueling_odometer"
+        app:layout_constraintStart_toStartOf="@+id/iv_description_date"
+        app:layout_constraintTop_toTopOf="@+id/til_edit_refueling_odometer" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_edit_refueling_odometer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/til_edit_refueling_distance"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/iv_description_odometer"
+        app:layout_constraintStart_toStartOf="@+id/tv_edit_refueling_date"
+        app:layout_constraintTop_toBottomOf="@+id/tv_edit_refueling_date">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_edit_refueling_odometer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_edit_refueling_odometer"
+            android:inputType="number"
+            android:maxLength="7"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            tools:text="12568" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_edit_refueling_distance"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/tv_edit_refueling_date"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/til_edit_refueling_odometer"
+        app:layout_constraintTop_toTopOf="@+id/til_edit_refueling_odometer">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_edit_refueling_distance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_edit_refueling_distance"
+            android:inputType="number"
+            android:maxLength="7"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            tools:text="245" />
+    </android.support.design.widget.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/iv_description_fuel_brand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/description_edit_refueling_fuel_brand"
+        android:src="@drawable/ic_fuel_brand_24"
+        app:layout_constraintBottom_toTopOf="@+id/ibtn_add_gas_station"
+        app:layout_constraintStart_toStartOf="@+id/iv_description_odometer"
+        app:layout_constraintTop_toTopOf="@+id/ibtn_add_fuel_brand" />
+
+    <Spinner
+        android:id="@+id/sp_edit_refueling_fuel_brand"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/ibtn_add_fuel_brand"
+        app:layout_constraintEnd_toStartOf="@+id/ibtn_add_fuel_brand"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tv_edit_refueling_date"
+        app:layout_constraintTop_toTopOf="@+id/ibtn_add_fuel_brand" />
+
+    <ImageButton
+        android:id="@+id/ibtn_add_fuel_brand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/description_edit_refueling_add_fuel_brand"
+        android:padding="8dp"
+        android:src="@drawable/ic_action_add_circle_outline"
+        app:layout_constraintEnd_toEndOf="@+id/tv_edit_refueling_date"
+        app:layout_constraintTop_toBottomOf="@+id/til_edit_refueling_odometer" />
+
+    <ImageView
+        android:id="@+id/iv_description_gas_station"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/description_edit_refueling_gas_station"
+        android:src="@drawable/ic_placeholder_24"
+        app:layout_constraintBottom_toBottomOf="@+id/ibtn_add_gas_station"
+        app:layout_constraintStart_toStartOf="@+id/iv_description_fuel_brand"
+        app:layout_constraintTop_toTopOf="@+id/ibtn_add_gas_station" />
+
+    <Spinner
+        android:id="@+id/sp_edit_refueling_gas_station"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/ibtn_add_gas_station"
+        app:layout_constraintEnd_toStartOf="@+id/ibtn_add_gas_station"
+        app:layout_constraintStart_toStartOf="@+id/sp_edit_refueling_fuel_brand"
+        app:layout_constraintTop_toTopOf="@+id/ibtn_add_gas_station" />
+
+    <ImageButton
+        android:id="@+id/ibtn_add_gas_station"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/description_edit_refueling_add_gas_station"
+        android:padding="8dp"
+        android:src="@drawable/ic_action_add_circle_outline"
+        app:layout_constraintEnd_toEndOf="@+id/ibtn_add_fuel_brand"
+        app:layout_constraintTop_toBottomOf="@+id/ibtn_add_fuel_brand" />
+
+    <ImageView
+        android:id="@+id/iv_description_fuel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/description_edit_refueling_fuel_volume"
+        android:src="@drawable/ic_gasoline_24"
+        app:layout_constraintBottom_toBottomOf="@+id/til_edit_refueling_price"
+        app:layout_constraintStart_toStartOf="@+id/iv_description_gas_station"
+        app:layout_constraintTop_toTopOf="@+id/til_edit_refueling_price" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_edit_refueling_price"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/til_edit_refueling_volume"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/sp_edit_refueling_gas_station"
+        app:layout_constraintTop_toBottomOf="@+id/ibtn_add_gas_station">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_edit_refueling_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_edit_refueling_price"
+            android:inputType="numberDecimal"
+            android:maxLength="7"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            tools:text="1025" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_edit_refueling_volume"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/til_edit_refueling_price_unit"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/til_edit_refueling_price"
+        app:layout_constraintTop_toTopOf="@+id/til_edit_refueling_price">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_edit_refueling_volume"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_edit_refueling_volume"
+            android:inputType="numberDecimal"
+            android:maxLength="7"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            tools:text="25.6" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_edit_refueling_price_unit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/ibtn_add_gas_station"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/til_edit_refueling_volume"
+        app:layout_constraintTop_toTopOf="@+id/til_edit_refueling_volume">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_edit_refueling_price_unit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_edit_refueling_price_unit"
+            android:inputType="numberDecimal"
+            android:maxLength="7"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            tools:text="32.5" />
+    </android.support.design.widget.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/iv_description_fuel_balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/description_edit_refueling_fuel_balance"
+        android:src="@drawable/ic_fuel_balance_24"
+        app:layout_constraintBottom_toBottomOf="@+id/til_edit_refueling_fuel_balance"
+        app:layout_constraintStart_toStartOf="@+id/iv_description_fuel"
+        app:layout_constraintTop_toTopOf="@+id/til_edit_refueling_fuel_balance" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_edit_refueling_fuel_balance"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/tv_edit_refueling_date"
+        app:layout_constraintStart_toStartOf="@+id/tv_edit_refueling_date"
+        app:layout_constraintTop_toBottomOf="@+id/til_edit_refueling_volume">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_edit_refueling_fuel_balance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_edit_refueling_fuel_balance"
+            android:inputType="numberDecimal|numberSigned"
+            android:maxLength="7"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            tools:text="2.5" />
+    </android.support.design.widget.TextInputLayout>
+
+
+</android.support.constraint.ConstraintLayout>

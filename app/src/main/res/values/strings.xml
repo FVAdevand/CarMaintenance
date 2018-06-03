@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CarMaintenance</string>
+    <string name="app_name">Car Maintenance</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -7,11 +7,8 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <!--DateUtils-->
-    <string name="formatter_date">dd/mm/yy</string>
+    <string name="formatter_date">dd/MM/yy</string>
 
     <!--pref currency-->
     <string name="hryvnia" translatable="false">UAH|₴</string>
@@ -43,6 +40,27 @@
         <item>@string/kilometer</item>
         <item>@string/mile</item>
     </string-array>
+
+    <!--!!!-->
     <string name="title_activity_edit_vehicle">EditVehicleActivity</string>
+    <string name="title_activity_edit_maintenance">EditMaintenanceActivity</string>
+
+    <!--edit refueling-->
+    <string name="description_edit_refueling_date">Refueling date</string>
+    <string name="description_edit_refueling_odometer">Refueling odometer</string>
+    <string name="description_edit_refueling_add_fuel_brand">Add fuel brand</string>
+    <string name="description_edit_refueling_gas_station">Gas station</string>
+    <string name="description_edit_refueling_add_gas_station">Add gas station</string>
+    <string name="description_edit_refueling_fuel_volume">Fuel volume</string>
+    <string name="description_edit_refueling_fuel_brand">Fuel brand</string>
+    <string name="description_edit_refueling_fuel_balance">Fuel balance</string>
+    <string name="hint_edit_refueling_odometer">Odometer</string>
+    <string name="hint_edit_refueling_distance">Distance</string>
+    <string name="hint_edit_refueling_price">Price</string>
+    <string name="hint_edit_refueling_volume">Volume</string>
+    <string name="hint_edit_refueling_price_unit">Price unit</string>
+    <string name="hint_edit_refueling_fuel_balance">Fuel balance</string>
+    <string name="error_edit_refueling_write_in">Write in the value</string>
+    <string name="error_edit_refueling_incorrect_value">Incorrect the value</string>
 
 </resources>

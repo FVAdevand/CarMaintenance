@@ -60,7 +60,10 @@ public class RefuelingFragment extends Fragment
         mCurrentVehicleId = ShPrefManager.getCurrentVehicleId(view.getContext());
 
         mRefuelingListView = view.findViewById(R.id.refueling_list);
-        mRefuelingListView.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        mRefuelingListView.setLayoutManager(linearLayoutManager);
 
         mRefuelingListView.setHasFixedSize(true);
         mRefuelingListView.setAdapter(getAdapter());
@@ -82,8 +85,8 @@ public class RefuelingFragment extends Fragment
                 String date = DateUtils.formatDate(RefuelingFragment.this.getContext(), model.getTimeStamp());
                 holder.mDateView.setText(date);
                 holder.mCoastView.setText(TextFormatUtils.coastFormat(model.getCoast()));
-                holder.mOdometrView.setText(TextFormatUtils.odometrFormat(model.getOdometr()));
-                holder.mDistanceView.setText(TextFormatUtils.distanceFormat(model.getDistance()));
+                holder.mOdometerView.setText(TextFormatUtils.odometerFormat(model.getOdometer()));
+                holder.mFuelRateView.setText(TextFormatUtils.fuelRateFormat(model.getFuelRate()));
                 holder.mVolumeView.setText(TextFormatUtils.volumeFormat(model.getVolume()));
                 holder.mGasStationView.setText(model.getGasStation());
                 holder.mBrandFuelView.setText(model.getBrandFuel());
@@ -131,8 +134,8 @@ public class RefuelingFragment extends Fragment
 
         TextView mDateView;
         TextView mCoastView;
-        TextView mOdometrView;
-        TextView mDistanceView;
+        TextView mOdometerView;
+        TextView mFuelRateView;
         TextView mVolumeView;
         TextView mGasStationView;
         TextView mBrandFuelView;
@@ -143,8 +146,8 @@ public class RefuelingFragment extends Fragment
 
             mDateView = itemView.findViewById(R.id.tv_refueling_date);
             mCoastView = itemView.findViewById(R.id.tv_refueling_coast);
-            mOdometrView = itemView.findViewById(R.id.tv_refueling_odometr);
-            mDistanceView = itemView.findViewById(R.id.tv_refueling_distance);
+            mOdometerView = itemView.findViewById(R.id.tv_refueling_odometr);
+            mFuelRateView = itemView.findViewById(R.id.tv_refueling_fuel_rate);
             mVolumeView = itemView.findViewById(R.id.tv_refueling_volume);
             mGasStationView = itemView.findViewById(R.id.tv_refueling_gas_station);
             mBrandFuelView = itemView.findViewById(R.id.tv_refueling_brand_fuel);

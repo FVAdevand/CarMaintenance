@@ -30,7 +30,7 @@
         android:layout_height="wrap_content">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/et_vehicle_model"
+            android:id="@+id/et_edit_refueling_odometer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Model"
@@ -63,7 +63,7 @@
             android:id="@+id/et_vehicle_initial_odometr"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Initial odometr"
+            android:hint="Initial odometer"
             android:inputType="number"
             android:maxLines="1"
             android:selectAllOnFocus="true" />

@@ -26,13 +26,23 @@ public class TextFormatUtils {
         return String.format(Locale.getDefault(), formatterStr, volume);
     }
 
-    public static String odometrFormat(int odometr) {
+    public static String odometerFormat(int odometer) {
         String formatterStr = "%,d km";
-        return String.format(Locale.getDefault(), formatterStr, odometr);
+        return String.format(Locale.getDefault(), formatterStr, odometer);
     }
 
     public static String distanceFormat(int distance) {
         String formatterStr = "+%,d km";
         return String.format(Locale.getDefault(), formatterStr, distance);
+    }
+
+    public static String fuelRateFormat(double fuelRate) {
+        String formatterStr = "%,.1f L/100km";
+        return String.format(Locale.getDefault(), formatterStr, fuelRate);
+    }
+
+    public static String decimalFormatWithDot(double numberDecimal) {
+        String numberDecimalStr = String.format(Locale.getDefault(), "%.2f", numberDecimal);
+        return numberDecimalStr.replace(",", ".");
     }
 }

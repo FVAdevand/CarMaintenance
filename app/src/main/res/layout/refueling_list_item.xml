@@ -42,7 +42,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.85"
-                    android:drawableStart="@drawable/ic_calendar"
+                    android:drawableStart="@drawable/ic_calendar_16"
                     android:textColor="@android:color/black"
                     android:textStyle="bold"
                     tools:text="22.04.2018" />
@@ -53,7 +53,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:drawableStart="@drawable/ic_wallet"
+                    android:drawableStart="@drawable/ic_wallet_16"
                     android:textColor="@android:color/black"
                     android:textStyle="bold"
                     tools:text="1000 UAH" />
@@ -71,16 +71,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:drawableStart="@drawable/ic_dashboard"
+                    android:drawableStart="@drawable/ic_odometer_16"
                     tools:text="255 545 km" />
 
                 <TextView
-                    android:id="@+id/tv_refueling_distance"
+                    android:id="@+id/tv_refueling_fuel_rate"
                     style="@style/refueling_list_item"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.85"
-                    tools:text="+345 km" />
+                    tools:text="8.5 L/100 km" />
 
                 <TextView
                     android:id="@+id/tv_refueling_volume"
@@ -88,7 +88,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:drawableStart="@drawable/ic_gasoline"
+                    android:drawableStart="@drawable/ic_gasoline_16"
                     tools:text="25.5 L" />
 
             </LinearLayout>
@@ -104,7 +104,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:drawableStart="@drawable/ic_placeholder"
+                    android:drawableStart="@drawable/ic_placeholder_16"
                     tools:text="OKKO" />
 
                 <TextView
@@ -121,7 +121,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:drawableStart="@drawable/ic_barcode"
+                    android:drawableStart="@drawable/ic_barcode_16"
                     tools:text="31.49 UAH/L" />
 
             </LinearLayout>

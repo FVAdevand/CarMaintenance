@@ -3,32 +3,27 @@ package ua.fvadevand.carmaintenance.firebase.model;
 public class Refueling {
     private static final String LOG_TAG = Refueling.class.getSimpleName();
 
-    private int mId;
+    private String mId;
     private long mTimeStamp;
     private double mVolume;
     private double mPriceUnit;
     private double mCoast;
     private double mFuelBalance;
-    private int mOdometr;
-    private int mDistance;
+    private int mOdometer;
+    //    private int mDistance;
     private String mGasStation;
     private String mBrandFuel;
+    private double mFuelRate;
 
     public Refueling() {
     }
 
-    public Refueling(long timeStamp, double volume, double priceUnit,
-                     double coast, double fuelBalance, int odometr,
-                     int distance, String gasStation, String brandFuel) {
-        mTimeStamp = timeStamp;
-        mVolume = volume;
-        mPriceUnit = priceUnit;
-        mCoast = coast;
-        mFuelBalance = fuelBalance;
-        mOdometr = odometr;
-        mDistance = distance;
-        mGasStation = gasStation;
-        mBrandFuel = brandFuel;
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String id) {
+        mId = id;
     }
 
     public long getTimeStamp() {
@@ -71,12 +66,12 @@ public class Refueling {
         mFuelBalance = fuelBalance;
     }
 
-    public int getOdometr() {
-        return mOdometr;
+    public int getOdometer() {
+        return mOdometer;
     }
 
-    public void setOdometr(int odometr) {
-        mOdometr = odometr;
+    public void setOdometer(int odometer) {
+        mOdometer = odometer;
     }
 
     public String getGasStation() {
@@ -95,11 +90,11 @@ public class Refueling {
         mBrandFuel = brandFuel;
     }
 
-    public int getDistance() {
-        return mDistance;
+    public double getFuelRate() {
+        return mFuelRate;
     }
 
-    public void setDistance(int distance) {
-        mDistance = distance;
+    public void setFuelRate(double fuelRate) {
+        mFuelRate = fuelRate;
     }
 }
