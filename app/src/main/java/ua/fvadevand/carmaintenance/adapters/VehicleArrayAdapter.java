@@ -9,12 +9,13 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import ua.fvadevand.carmaintenance.R;
 import ua.fvadevand.carmaintenance.firebase.model.Vehicle;
 
 public class VehicleArrayAdapter extends BaseAdapter {
 
     private List<Vehicle> mVehicleList;
-    private Context mContext;
+    private final Context mContext;
 
     public VehicleArrayAdapter(Context context, List<Vehicle> vehicleList) {
         mContext = context;
@@ -38,7 +39,7 @@ public class VehicleArrayAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return getRowView(position, convertView, parent, android.R.layout.simple_spinner_item);
+        return getRowView(position, convertView, parent, R.layout.spinner_item);
     }
 
     @Override
@@ -55,5 +56,9 @@ public class VehicleArrayAdapter extends BaseAdapter {
         TextView modelVehicleView = (TextView) rowView;
         modelVehicleView.setText(mVehicleList.get(position).getModel());
         return rowView;
+    }
+
+    public int getPosition(Vehicle vehicle) {
+        return mVehicleList.indexOf(vehicle);
     }
 }

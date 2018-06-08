@@ -14,6 +14,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -25,11 +26,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import ua.fvadevand.carmaintenance.R;
 import ua.fvadevand.carmaintenance.dialogs.DatePickerDialogFragment;
 import ua.fvadevand.carmaintenance.dialogs.SetInfoDialogFragment;
+import ua.fvadevand.carmaintenance.firebase.FirebaseAdditionalInfo;
 import ua.fvadevand.carmaintenance.firebase.FirebaseRefueling;
 import ua.fvadevand.carmaintenance.firebase.model.Refueling;
 import ua.fvadevand.carmaintenance.utilities.CalculationUtils;
@@ -54,22 +58,29 @@ public class EditRefuelingFragment extends Fragment
     private static final int MAIN_VOLUME = 1;
     private static final int MAIN_PRICE_UNIT = 2;
 
+    private static final int ACTION_ADD_GAS_STATION = 0;
+    private static final int ACTION_ADD_FUEL_BRAND = 1;
 
     private String mCurrentVehicleId;
     private Refueling mLastRefueling;
     private Refueling mCurrentRefueling;
     private Calendar mCalendar;
     private int mCalculationModePrice;
+    private int mCurrentAction;
+    private List<String> mFuelBrandList = new ArrayList<>();
+    private List<String> mGasStationList = new ArrayList<>();
 
     private TextView mDateView;
     private EditText mOdometerView;
     private EditText mDistanceView;
     private Spinner mFuelBrandSpinner;
-    private Spinner mGasSationSpinner;
+    private Spinner mGasStationSpinner;
     private EditText mPriceView;
     private EditText mVolumeView;
     private EditText mPriceUnitView;
     private EditText mFuelBalanceView;
+    private ArrayAdapter<String> mFuelBrandAdapter;
+    private ArrayAdapter<String> mGasStationAdapter;
 
     public EditRefuelingFragment() {
     }
@@ -103,6 +114,8 @@ public class EditRefuelingFragment extends Fragment
         initView(view);
         addTextChangeListener();
         fetchLastRefueling();
+        fetchGasStationList();
+        fetchFuelBrandList();
 
         FragmentActivity activity = getActivity();
         if (activity != null) {
@@ -112,6 +125,7 @@ public class EditRefuelingFragment extends Fragment
                 @Override
                 public void onClick(View v) {
                     updateRefueling();
+                    getActivity().finish();
                 }
             });
         }
@@ -126,8 +140,18 @@ public class EditRefuelingFragment extends Fragment
         mOdometerView = view.findViewById(R.id.et_edit_refueling_odometer);
         mDistanceView = view.findViewById(R.id.et_edit_refueling_distance);
         mFuelBrandSpinner = view.findViewById(R.id.sp_edit_refueling_fuel_brand);
-        mGasSationSpinner = view.findViewById(R.id.sp_edit_refueling_gas_station);
-        //TODO: set spinners
+        mGasStationSpinner = view.findViewById(R.id.sp_edit_refueling_gas_station);
+
+        if (getActivity() != null) {
+            mFuelBrandAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, mFuelBrandList);
+            mFuelBrandAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mFuelBrandSpinner.setAdapter(mFuelBrandAdapter);
+
+            mGasStationAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, mGasStationList);
+            mGasStationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mGasStationSpinner.setAdapter(mGasStationAdapter);
+        }
+
         mPriceView = view.findViewById(R.id.et_edit_refueling_price);
         mVolumeView = view.findViewById(R.id.et_edit_refueling_volume);
         mPriceUnitView = view.findViewById(R.id.et_edit_refueling_price_unit);
@@ -159,19 +183,86 @@ public class EditRefuelingFragment extends Fragment
                 });
     }
 
+    private void fetchFuelBrandList() {
+        Query fuelBrandRef = FirebaseAdditionalInfo.getFuelBrandRef().orderByValue();
+        fuelBrandRef
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        mFuelBrandList.clear();
+                        for (DataSnapshot fuelBrandData : dataSnapshot.getChildren()) {
+                            mFuelBrandList.add(fuelBrandData.getValue(String.class));
+                        }
+                        mFuelBrandAdapter.notifyDataSetChanged();
+                        showLastFuelBrand();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+    private void fetchGasStationList() {
+        Query gasStationRef = FirebaseAdditionalInfo.getGasStationRef().orderByValue();
+        gasStationRef
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        mGasStationList.clear();
+                        for (DataSnapshot gasStationData : dataSnapshot.getChildren()) {
+                            mGasStationList.add(gasStationData.getValue(String.class));
+                        }
+                        mGasStationAdapter.notifyDataSetChanged();
+                        showLastGasStation();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+    private void showLastFuelBrand() {
+        if (mLastRefueling != null) {
+            int fuelBrandPosition = mFuelBrandAdapter.getPosition(mLastRefueling.getBrandFuel());
+            if (fuelBrandPosition >= 0) {
+                mFuelBrandSpinner.setSelection(fuelBrandPosition);
+            }
+        }
+    }
+
+    private void showLastGasStation() {
+        if (mLastRefueling != null) {
+            int gasStationPosition = mGasStationAdapter.getPosition(mLastRefueling.getGasStation());
+            if (gasStationPosition >= 0) {
+                mGasStationSpinner.setSelection(gasStationPosition);
+            }
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ibtn_add_fuel_brand:
-                DialogFragment dialog = new SetInfoDialogFragment();
-                dialog.show(getChildFragmentManager(), "dialog_add_fuel_brand");
+                mCurrentAction = ACTION_ADD_FUEL_BRAND;
+                showAddInfoDialog(getString(R.string.title_add_info_dialog_fuel_brand));
                 break;
             case R.id.ibtn_add_gas_station:
+                mCurrentAction = ACTION_ADD_GAS_STATION;
+                showAddInfoDialog(getString(R.string.title_add_info_dialog_gas_station));
                 break;
             case R.id.tv_edit_refueling_date:
                 showDatePickerDialog();
                 break;
         }
+    }
+
+    private void showAddInfoDialog(String title) {
+        DialogFragment dialog = SetInfoDialogFragment.newInstance(title);
+        dialog.show(getChildFragmentManager(), "dialog_add_info");
     }
 
     @Override
@@ -365,8 +456,6 @@ public class EditRefuelingFragment extends Fragment
             return;
         }
 
-        //TODO: get data from spinners
-
         if (mLastRefueling != null && mCalendar.getTimeInMillis() < mLastRefueling.getTimeStamp()) {
             mDateView.setError("Incorrect date");
             return;
@@ -390,8 +479,8 @@ public class EditRefuelingFragment extends Fragment
             mCurrentRefueling = new Refueling();
         }
 
-        mCurrentRefueling.setBrandFuel("АИ 95");
-        mCurrentRefueling.setGasStation("OKKO");
+        mCurrentRefueling.setBrandFuel(mFuelBrandSpinner.getSelectedItem().toString());
+        mCurrentRefueling.setGasStation(mGasStationSpinner.getSelectedItem().toString());
         mCurrentRefueling.setTimeStamp(mCalendar.getTimeInMillis());
         mCurrentRefueling.setOdometer(odometer);
         mCurrentRefueling.setCoast(price);
@@ -415,6 +504,17 @@ public class EditRefuelingFragment extends Fragment
 
     @Override
     public void onClickPositiveInfoDialog(String info) {
-
+        switch (mCurrentAction) {
+            case ACTION_ADD_FUEL_BRAND:
+                if (!mFuelBrandList.contains(info)) {
+                    FirebaseAdditionalInfo.setFuelBrand(info);
+                }
+                break;
+            case ACTION_ADD_GAS_STATION:
+                if (mGasStationList.contains(info)) {
+                    FirebaseAdditionalInfo.setGasStation(info);
+                }
+                break;
+        }
     }
 }

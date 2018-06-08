@@ -11,13 +11,19 @@ public class FirebaseAdditionalInfo {
     }
 
     public static void setGasStation(String gasStationName) {
-        getAdditionalInfoRef().child(Firebase.INFO_GAS_STATION_REF)
-                .setValue(gasStationName);
+        getGasStationRef().push().setValue(gasStationName);
     }
 
     public static void setFuelBrand(String fuelBrand) {
-        getAdditionalInfoRef().child(Firebase.INFO_FUEL_BRAND_REF)
-                .setValue(fuelBrand);
+        getFuelBrandRef().push().setValue(fuelBrand);
+    }
+
+    public static DatabaseReference getGasStationRef() {
+        return getAdditionalInfoRef().child(Firebase.INFO_GAS_STATION_REF);
+    }
+
+    public static DatabaseReference getFuelBrandRef() {
+        return getAdditionalInfoRef().child(Firebase.INFO_FUEL_BRAND_REF);
     }
 
     private static DatabaseReference getAdditionalInfoRef() {

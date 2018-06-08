@@ -1,5 +1,7 @@
 package ua.fvadevand.carmaintenance.firebase.model;
 
+import java.util.Objects;
+
 public class Vehicle {
     private static final String LOG_TAG = Vehicle.class.getSimpleName();
 
@@ -8,7 +10,7 @@ public class Vehicle {
     private String mModel;
     private String mPhotoPath;
     private String mYearManufacture;
-    private int mInitialOdometr;
+    private int mInitialOdometer;
     private long mPhotoTimestamp;
 
     public Vehicle() {
@@ -58,12 +60,12 @@ public class Vehicle {
         mYearManufacture = yearManufacture;
     }
 
-    public int getInitialOdometr() {
-        return mInitialOdometr;
+    public int getInitialOdometer() {
+        return mInitialOdometer;
     }
 
-    public void setInitialOdometr(int initialOdometr) {
-        mInitialOdometr = initialOdometr;
+    public void setInitialOdometer(int initialOdometer) {
+        mInitialOdometer = initialOdometer;
     }
 
     public long getPhotoTimestamp() {
@@ -72,5 +74,25 @@ public class Vehicle {
 
     public void setPhotoTimestamp(long photoTimestamp) {
         mPhotoTimestamp = photoTimestamp;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vehicle vehicle = (Vehicle) o;
+        return mInitialOdometer == vehicle.mInitialOdometer &&
+                mPhotoTimestamp == vehicle.mPhotoTimestamp &&
+                Objects.equals(mId, vehicle.mId) &&
+                Objects.equals(mManufacturer, vehicle.mManufacturer) &&
+                Objects.equals(mModel, vehicle.mModel) &&
+                Objects.equals(mPhotoPath, vehicle.mPhotoPath) &&
+                Objects.equals(mYearManufacture, vehicle.mYearManufacture);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(mId, mManufacturer, mModel, mPhotoPath, mYearManufacture, mInitialOdometer, mPhotoTimestamp);
     }
 }

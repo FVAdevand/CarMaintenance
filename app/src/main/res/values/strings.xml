@@ -63,4 +63,8 @@
     <string name="error_edit_refueling_write_in">Write in the value</string>
     <string name="error_edit_refueling_incorrect_value">Incorrect the value</string>
 
+    <!--add info dialog-->
+    <string name="title_add_info_dialog_gas_station">Enter gas station name</string>
+    <string name="title_add_info_dialog_fuel_brand">Enter fuel brand name</string>
+
 </resources>

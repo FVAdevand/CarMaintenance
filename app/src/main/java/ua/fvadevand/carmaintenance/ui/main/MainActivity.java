@@ -61,6 +61,9 @@ public class MainActivity extends AppCompatActivity
     private List<Vehicle> mVehicleList;
     private VehicleArrayAdapter mSpinnerAdapter;
     private Spinner mSpinnerVehicleModel;
+    private boolean isNewTime = true;
+    private Vehicle mCurrentVehicle;
+
 
     private OnSetCurrentVehicleListener mListener;
 
@@ -93,7 +96,6 @@ public class MainActivity extends AppCompatActivity
             startSignInActivity();
         } else {
             fetchVehicleList();
-            Log.i(LOG_TAG, "onCreate: ");
         }
 
         mSpinnerAdapter = new VehicleArrayAdapter(this, mVehicleList);
@@ -101,10 +103,16 @@ public class MainActivity extends AppCompatActivity
         mSpinnerVehicleModel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (mListener != null) {
-                    mListener.onSetCurrentVehicle(mVehicleList.get(position).getId());
+
+                if (!isNewTime) {
+                    if (mListener != null) {
+                        mListener.onSetCurrentVehicle(mVehicleList.get(position).getId());
+                    }
+                    onChangeCurrentVehicle(position);
+                    Log.i(LOG_TAG, "onItemSelected: spinner");
+                } else {
+                    isNewTime = false;
                 }
-                onChangeCurrentVehicle(position);
             }
 
             @Override
@@ -112,8 +120,6 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-
-
 
         mCurrentVehicleId = ShPrefManager.getCurrentVehicleId(this);
         if (mCurrentVehicleId != null) {
@@ -199,10 +205,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RC_SIGN_IN)
-            Log.i(LOG_TAG, "onActivityResult: " + resultCode);
         if (resultCode == RESULT_OK) {
             fetchVehicleList();
-            Log.i(LOG_TAG, "onActivityResult: RESULT_OK");
         } else {
             finish();
         }
@@ -289,9 +293,15 @@ public class MainActivity extends AppCompatActivity
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Vehicle currentVehicle = dataSnapshot.getValue(Vehicle.class);
-                        if (currentVehicle != null) {
-                            displayVehicle(currentVehicle);
+                        mCurrentVehicle = dataSnapshot.getValue(Vehicle.class);
+                        if (mCurrentVehicle != null) {
+                            displayVehicle(mCurrentVehicle);
+                            int currentVehiclePosition = mSpinnerAdapter.getPosition(mCurrentVehicle);
+                            Log.i(LOG_TAG, "onDataChange: " + currentVehiclePosition + " " + mCurrentVehicleId);
+                            if (currentVehiclePosition >= 0) {
+                                mSpinnerVehicleModel.setSelection(currentVehiclePosition);
+                                Log.i(LOG_TAG, "onDataChange: setSpinner");
+                            }
                         }
                     }
 

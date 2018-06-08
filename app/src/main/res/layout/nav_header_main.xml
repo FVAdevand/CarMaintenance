@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:gravity="bottom"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:gravity="bottom" >
 
     <ImageView
         android:id="@+id/iv_background_main_nav_bar"
@@ -18,8 +17,7 @@
         android:layout_height="wrap_content"
         android:minWidth="150dp"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/nav_header_vertical_spacing"
-        android:spinnerMode="dropdown" />
+        android:layout_margin="@dimen/nav_header_vertical_spacing" />
 
 
 </RelativeLayout>

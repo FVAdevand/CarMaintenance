@@ -221,7 +221,7 @@ public class EditVehicleFragment extends Fragment
 
         String initialOdometerStr = mInitialOdometerView.getText().toString();
         if (!TextUtils.isEmpty(initialOdometerStr)) {
-            mCurrentVehicle.setInitialOdometr(Integer.parseInt(initialOdometerStr));
+            mCurrentVehicle.setInitialOdometer(Integer.parseInt(initialOdometerStr));
         }
 
         mCurrentVehicle.setYearManufacture(mYearManufacturerView.getText().toString());
@@ -235,7 +235,7 @@ public class EditVehicleFragment extends Fragment
         mManufacturerView.setText(vehicle.getManufacturer());
         mModelView.setText(vehicle.getModel());
         mYearManufacturerView.setText(vehicle.getYearManufacture());
-        mInitialOdometerView.setText(String.format(Locale.getDefault(), "%d", vehicle.getInitialOdometr()));
+        mInitialOdometerView.setText(String.format(Locale.getDefault(), "%d", vehicle.getInitialOdometer()));
         long photoTimestamp = vehicle.getPhotoTimestamp();
         if (photoTimestamp > 0) {
             GlideApp.with(this)

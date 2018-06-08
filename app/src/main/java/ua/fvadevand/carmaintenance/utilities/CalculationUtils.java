@@ -8,10 +8,10 @@ public class CalculationUtils {
     }
 
     public static double calculationFuelRate(Refueling pastRefueling, Refueling currentRefueling) {
-        double distance = currentRefueling.getOdometer() - pastRefueling.getOdometer();
+        int distance = currentRefueling.getOdometer() - pastRefueling.getOdometer();
         double pastVolume = pastRefueling.getVolume() + pastRefueling.getFuelBalance();
         double currentVolume = currentRefueling.getFuelBalance();
         double volume = pastVolume - currentVolume;
-        return volume / (distance / 100);
+        return volume / (distance / 100.0);
     }
 }
