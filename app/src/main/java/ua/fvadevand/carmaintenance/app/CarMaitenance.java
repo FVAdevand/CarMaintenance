@@ -1,4 +1,4 @@
-package ua.fvadevand.carmaintenance;
+package ua.fvadevand.carmaintenance.app;
 
 import android.app.Application;
 

@@ -1,4 +1,4 @@
-package ua.fvadevand.carmaintenance;
+package ua.fvadevand.carmaintenance.ui.main;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,6 +16,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.Query;
 
+import ua.fvadevand.carmaintenance.R;
 import ua.fvadevand.carmaintenance.firebase.FirebaseRefueling;
 import ua.fvadevand.carmaintenance.firebase.model.Refueling;
 import ua.fvadevand.carmaintenance.interfaces.OnSetCurrentVehicleListener;

@@ -1,4 +1,4 @@
-package ua.fvadevand.carmaintenance;
+package ua.fvadevand.carmaintenance.ui.editor;
 
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import ua.fvadevand.carmaintenance.R;
 import ua.fvadevand.carmaintenance.firebase.Firebase;
 
 public class EditVehicleActivity extends AppCompatActivity

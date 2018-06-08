@@ -1,4 +1,4 @@
-package ua.fvadevand.carmaintenance;
+package ua.fvadevand.carmaintenance.ui.editor;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 
+import ua.fvadevand.carmaintenance.R;
 import ua.fvadevand.carmaintenance.dialogs.DatePickerDialogFragment;
 import ua.fvadevand.carmaintenance.dialogs.SetInfoDialogFragment;
 import ua.fvadevand.carmaintenance.firebase.FirebaseRefueling;

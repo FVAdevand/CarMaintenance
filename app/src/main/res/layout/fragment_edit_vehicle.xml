@@ -6,7 +6,7 @@
     android:layout_marginTop="16dp"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context=".EditVehicleFragment"
+    tools:context=".ui.editor.EditVehicleFragment"
     tools:showIn="@layout/activity_edit_vehicle">
 
     <android.support.design.widget.TextInputLayout

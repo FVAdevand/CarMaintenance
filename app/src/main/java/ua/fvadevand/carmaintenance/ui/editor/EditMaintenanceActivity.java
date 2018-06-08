@@ -1,9 +1,10 @@
-package ua.fvadevand.carmaintenance;
+package ua.fvadevand.carmaintenance.ui.editor;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import ua.fvadevand.carmaintenance.R;
 import ua.fvadevand.carmaintenance.managers.ShPrefManager;
 
 public class EditMaintenanceActivity extends AppCompatActivity {

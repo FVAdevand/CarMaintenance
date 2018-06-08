@@ -1,4 +1,4 @@
-package ua.fvadevand.carmaintenance;
+package ua.fvadevand.carmaintenance.ui.editor;
 
 import android.app.Activity;
 import android.content.Context;
@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import ua.fvadevand.carmaintenance.R;
 import ua.fvadevand.carmaintenance.dialogs.AlertDeleteDialogFragment;
 import ua.fvadevand.carmaintenance.firebase.FirebaseVehicle;
 import ua.fvadevand.carmaintenance.firebase.model.Vehicle;

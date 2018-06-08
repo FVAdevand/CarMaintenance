@@ -1,4 +1,4 @@
-package ua.fvadevand.carmaintenance;
+package ua.fvadevand.carmaintenance.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ua.fvadevand.carmaintenance.R;
 import ua.fvadevand.carmaintenance.adapters.VehicleArrayAdapter;
 import ua.fvadevand.carmaintenance.dialogs.AlertDeleteDialogFragment;
 import ua.fvadevand.carmaintenance.firebase.Firebase;
@@ -40,6 +41,8 @@ import ua.fvadevand.carmaintenance.firebase.FirebaseVehicle;
 import ua.fvadevand.carmaintenance.firebase.model.Vehicle;
 import ua.fvadevand.carmaintenance.interfaces.OnSetCurrentVehicleListener;
 import ua.fvadevand.carmaintenance.managers.ShPrefManager;
+import ua.fvadevand.carmaintenance.ui.editor.EditMaintenanceActivity;
+import ua.fvadevand.carmaintenance.ui.editor.EditVehicleActivity;
 import ua.fvadevand.carmaintenance.utilities.GlideApp;
 
 public class MainActivity extends AppCompatActivity
