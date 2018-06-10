@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--pref currency-->
+    <string-array name="currency">
+        <item>@string/hryvnia</item>
+        <item>@string/dollar</item>
+        <item>@string/euro</item>
+        <item>@string/ruble</item>
+    </string-array>
+
+    <!--pref volume units-->
+    <string-array name="volume_units">
+        <item>@string/litre</item>
+        <item>@string/gallon</item>
+    </string-array>
+
+    <!--pref distance units-->
+    <string-array name="distance_units">
+        <item>@string/kilometer</item>
+        <item>@string/mile</item>
+    </string-array>
+
+    <!--fuel price api-->
+    <string-array name="codes_api_region">
+        <item>@string/ukraine</item>
+        <item>@string/vinnytsia</item>
+        <item>@string/volyn</item>
+        <item>@string/dnipropetrovsk</item>
+        <item>@string/donetsk</item>
+        <item>@string/zhytomyr</item>
+        <item>@string/zakarpattia</item>
+        <item>@string/zaporizhzhia</item>
+        <item>@string/ivano_frankivsk</item>
+        <item>@string/kyiv</item>
+        <item>@string/kirovohrad</item>
+        <item>@string/autonomous_republic_of_crimea</item>
+        <item>@string/luhansk</item>
+        <item>@string/lviv</item>
+        <item>@string/mykolaiv</item>
+        <item>@string/odesa</item>
+        <item>@string/poltava</item>
+        <item>@string/rivne</item>
+        <item>@string/sumy</item>
+        <item>@string/ternopil</item>
+        <item>@string/kharkiv</item>
+        <item>@string/kherson</item>
+        <item>@string/khmelnytskyi</item>
+        <item>@string/cherkasy</item>
+        <item>@string/chernihiv</item>
+        <item>@string/chernivtsi</item>
+    </string-array>
+
+    <string-array name="codes_api_type_fuel">
+        <item>@string/a80</item>
+        <item>@string/a92</item>
+        <item>@string/a95</item>
+        <item>@string/dt</item>
+        <item>@string/a95e</item>
+        <item>@string/gaz</item>
+    </string-array>
+
+</resources>

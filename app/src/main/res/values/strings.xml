@@ -1,11 +1,17 @@
 <resources>
     <string name="app_name">Car Maintenance</string>
+
+    <!--main-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="nav_action_vehicles">Vehicles</string>
+    <string name="nav_action_refueling">Refueling</string>
+    <string name="nav_action_fuel_price">Fuel price</string>
+
 
     <!--DateUtils-->
     <string name="formatter_date">dd/MM/yy</string>
@@ -16,30 +22,13 @@
     <string name="euro" translatable="false">EUR|€</string>
     <string name="ruble" translatable="false">RUB|₽</string>
 
-    <string-array name="currency">
-        <item>@string/hryvnia</item>
-        <item>@string/dollar</item>
-        <item>@string/euro</item>
-        <item>@string/ruble</item>
-    </string-array>
-
     <!--pref volume units-->
     <string name="litre">l</string>
     <string name="gallon">gal</string>
 
-    <string-array name="volume_units">
-        <item>@string/litre</item>
-        <item>@string/gallon</item>
-    </string-array>
-
     <!--pref distance units-->
     <string name="kilometer">km</string>
     <string name="mile">mi</string>
-
-    <string-array name="distance_units">
-        <item>@string/kilometer</item>
-        <item>@string/mile</item>
-    </string-array>
 
     <!--!!!-->
     <string name="title_activity_edit_vehicle">EditVehicleActivity</string>
@@ -67,4 +56,41 @@
     <string name="title_add_info_dialog_gas_station">Enter gas station name</string>
     <string name="title_add_info_dialog_fuel_brand">Enter fuel brand name</string>
 
+    <!--fuel price api-->
+    <string name="ukraine">30|Ukraine</string>
+    <string name="vinnytsia">27|Vinnytsia</string>
+    <string name="volyn">28|Volyn</string>
+    <string name="dnipropetrovsk">04|Dnipropetrovsk</string>
+    <string name="donetsk">05|Donetsk</string>
+    <string name="zhytomyr">06|Zhytomyr</string>
+    <string name="zakarpattia">07|Zakarpattia</string>
+    <string name="zaporizhzhia">08|Zaporizhzhia</string>
+    <string name="ivano_frankivsk">09|Ivano-Frankivsk</string>
+    <string name="kyiv">11|Kyiv</string>
+    <string name="kirovohrad">12|Kirovohrad</string>
+    <string name="autonomous_republic_of_crimea">10|Autonomous Republic of Crimea</string>
+    <string name="luhansk">13|Luhansk</string>
+    <string name="lviv">14|Lviv</string>
+    <string name="mykolaiv">15|Mykolaiv</string>
+    <string name="odesa">16|Odesa</string>
+    <string name="poltava">17|Poltava</string>
+    <string name="rivne">18|Rivne</string>
+    <string name="sumy">19|Sumy</string>
+    <string name="ternopil">20|Ternopil</string>
+    <string name="kharkiv">21|Kharkiv</string>
+    <string name="kherson">22|Kherson</string>
+    <string name="khmelnytskyi">23|Khmelnytskyi</string>
+    <string name="cherkasy">24|Cherkasy</string>
+    <string name="chernihiv">25|Chernihiv</string>
+    <string name="chernivtsi">26|Chernivtsi</string>
+
+    <string name="a80">A80|A-80</string>
+    <string name="a92">A92|A-92</string>
+    <string name="a95">A95|A-95</string>
+    <string name="dt">DT|Diesel</string>
+    <string name="a95e">A95E|A-95E</string>
+    <string name="gaz">GAZ|Gas</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

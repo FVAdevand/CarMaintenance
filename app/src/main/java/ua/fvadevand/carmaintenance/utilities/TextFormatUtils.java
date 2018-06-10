@@ -9,11 +9,9 @@ public class TextFormatUtils {
     private TextFormatUtils() {
     }
 
-    public static String coastFormat(double coast) {
+    public static String costFormat(double cost) {
         String formatterStr = "%,.0f ₴";
-//        NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
-//        Format financialFormatter = new DecimalFormat("#,##0.00 ₴");
-        return String.format(Locale.getDefault(), formatterStr, coast);
+        return String.format(Locale.getDefault(), formatterStr, cost);
     }
 
     public static String priceUnitFormat(double priceUnit) {

@@ -6,16 +6,16 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_vehicle"
-            android:icon="@drawable/ic_car_front"
-            android:title="Vehicles" />
+            android:icon="@drawable/ic_car_front_24"
+            android:title="@string/nav_action_vehicles" />
         <item
             android:id="@+id/nav_refueling"
-            android:icon="@drawable/ic_fuel_station"
-            android:title="Refuelings" />
+            android:icon="@drawable/ic_fuel_station_24"
+            android:title="@string/nav_action_refueling" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:id="@+id/nav_fuel_price"
+            android:icon="@drawable/ic_fuel_price_24"
+            android:title="@string/nav_action_fuel_price" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"

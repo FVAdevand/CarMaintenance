@@ -187,7 +187,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_refueling:
                 showRefuelingFragment();
                 break;
-            case R.id.nav_slideshow:
+            case R.id.nav_fuel_price:
+                showFuelPriceFragment();
                 break;
             case R.id.nav_manage:
                 break;
@@ -252,6 +253,7 @@ public class MainActivity extends AppCompatActivity
                 .commit();
         setListener(refuelingFragment);
         mFab.setImageResource(R.drawable.ic_action_add);
+        mFab.setVisibility(View.VISIBLE);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -267,12 +269,22 @@ public class MainActivity extends AppCompatActivity
                 .commit();
         setListener(vehicleFragment);
         mFab.setImageResource(R.drawable.ic_action_add);
+        mFab.setVisibility(View.VISIBLE);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, EditVehicleActivity.class));
             }
         });
+    }
+
+    private void showFuelPriceFragment() {
+        Fragment fuelPriceFragment = FuelPriceFragment.newInstance();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fuelPriceFragment)
+                .commit();
+        mListener = null;
+        mFab.setVisibility(View.GONE);
     }
 
     private void displayVehicle(Vehicle vehicle) {
