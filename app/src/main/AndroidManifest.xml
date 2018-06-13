@@ -36,6 +36,10 @@
             android:name=".ui.editor.EditMaintenanceActivity"
             android:label="@string/title_activity_edit_maintenance"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.report.ReportActivity"
+            android:label="@string/title_activity_report"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

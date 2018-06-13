@@ -255,7 +255,7 @@ public class EditRefuelingFragment extends Fragment
                 showAddInfoDialog(getString(R.string.title_add_info_dialog_gas_station));
                 break;
             case R.id.tv_edit_refueling_date:
-                showDatePickerDialog();
+                showDatePickerDialog(mCalendar.getTimeInMillis());
                 break;
         }
     }
@@ -273,8 +273,8 @@ public class EditRefuelingFragment extends Fragment
         }
     }
 
-    private void showDatePickerDialog() {
-        DatePickerDialogFragment fragment = new DatePickerDialogFragment();
+    private void showDatePickerDialog(long timeInMillis) {
+        DatePickerDialogFragment fragment = DatePickerDialogFragment.newInstance(timeInMillis);
         fragment.show(getChildFragmentManager(), "DatePicker");
     }
 
@@ -483,7 +483,7 @@ public class EditRefuelingFragment extends Fragment
         mCurrentRefueling.setGasStation(mGasStationSpinner.getSelectedItem().toString());
         mCurrentRefueling.setTimeStamp(mCalendar.getTimeInMillis());
         mCurrentRefueling.setOdometer(odometer);
-        mCurrentRefueling.setCoast(price);
+        mCurrentRefueling.setCost(price);
         mCurrentRefueling.setVolume(volume);
         mCurrentRefueling.setPriceUnit(priceUnit);
         mCurrentRefueling.setFuelBalance(Double.parseDouble(fuelBalanceStr));

@@ -43,6 +43,7 @@ import ua.fvadevand.carmaintenance.interfaces.OnSetCurrentVehicleListener;
 import ua.fvadevand.carmaintenance.managers.ShPrefManager;
 import ua.fvadevand.carmaintenance.ui.editor.EditMaintenanceActivity;
 import ua.fvadevand.carmaintenance.ui.editor.EditVehicleActivity;
+import ua.fvadevand.carmaintenance.ui.report.ReportActivity;
 import ua.fvadevand.carmaintenance.utilities.GlideApp;
 
 public class MainActivity extends AppCompatActivity
@@ -190,7 +191,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_fuel_price:
                 showFuelPriceFragment();
                 break;
-            case R.id.nav_manage:
+            case R.id.nav_report:
+                startActivity(new Intent(this, ReportActivity.class));
                 break;
             case R.id.nav_share:
                 break;

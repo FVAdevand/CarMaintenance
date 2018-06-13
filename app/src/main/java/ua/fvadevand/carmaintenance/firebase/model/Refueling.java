@@ -1,16 +1,14 @@
 package ua.fvadevand.carmaintenance.firebase.model;
 
 public class Refueling {
-    private static final String LOG_TAG = Refueling.class.getSimpleName();
 
     private String mId;
     private long mTimeStamp;
     private double mVolume;
     private double mPriceUnit;
-    private double mCoast;
+    private double mCost;
     private double mFuelBalance;
     private int mOdometer;
-    //    private int mDistance;
     private String mGasStation;
     private String mBrandFuel;
     private double mFuelRate;
@@ -50,12 +48,12 @@ public class Refueling {
         mPriceUnit = priceUnit;
     }
 
-    public double getCoast() {
-        return mCoast;
+    public double getCost() {
+        return mCost;
     }
 
-    public void setCoast(double coast) {
-        mCoast = coast;
+    public void setCost(double cost) {
+        mCost = cost;
     }
 
     public double getFuelBalance() {

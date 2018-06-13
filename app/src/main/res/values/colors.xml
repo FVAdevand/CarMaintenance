@@ -6,6 +6,7 @@
     <color name="colorBackground">#EEEEEE</color>
 
     <!--drawable color-->
-    <color name="colorDrawablePrimary">#FF000000</color>
+    <color name="colorDrawablePrimary">#000000</color>
     <color name="colorDrawableSecondary">#808080</color>
+    <color name="colorDrawableToolbar">#EEEEEE</color>
 </resources>
