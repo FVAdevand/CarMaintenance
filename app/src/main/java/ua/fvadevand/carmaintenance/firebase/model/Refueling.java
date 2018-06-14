@@ -3,7 +3,7 @@ package ua.fvadevand.carmaintenance.firebase.model;
 public class Refueling {
 
     private String mId;
-    private long mTimeStamp;
+    private long mTimestamp;
     private double mVolume;
     private double mPriceUnit;
     private double mCost;
@@ -24,12 +24,12 @@ public class Refueling {
         mId = id;
     }
 
-    public long getTimeStamp() {
-        return mTimeStamp;
+    public long getTimestamp() {
+        return mTimestamp;
     }
 
-    public void setTimeStamp(long timeStamp) {
-        mTimeStamp = timeStamp;
+    public void setTimestamp(long timestamp) {
+        mTimestamp = timestamp;
     }
 
     public double getVolume() {

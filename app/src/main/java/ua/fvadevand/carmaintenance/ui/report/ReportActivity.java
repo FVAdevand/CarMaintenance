@@ -8,29 +8,28 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.Calendar;
 
 import ua.fvadevand.carmaintenance.R;
+import ua.fvadevand.carmaintenance.managers.ShPrefManager;
 import ua.fvadevand.carmaintenance.utilities.DateUtils;
 
 public class ReportActivity extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
+//    public static final int DATE_FROM = 0;
+//    public static final int DATE_TO = 0;
+
+
+
     private SectionsPagerAdapter mSectionsPagerAdapter;
+
+    private String mCurrentVehicleId;
+    private Calendar mCalendarFrom;
+    private Calendar mCalendarTo;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -43,12 +42,14 @@ public class ReportActivity extends AppCompatActivity {
         setContentView(R.layout.activity_report);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.title_activity_report);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
         mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -57,19 +58,17 @@ public class ReportActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
+        mCurrentVehicleId = ShPrefManager.getCurrentVehicleId(this);
+
         TextView setDataFromView = findViewById(R.id.tv_date_from);
         TextView setDataToView = findViewById(R.id.tv_date_to);
-        Calendar calendar = Calendar.getInstance();
-        setDataToView.setText(DateUtils.formatDate(this, calendar.getTimeInMillis()));
-        int currentMonth = calendar.get(Calendar.MONTH);
-        if (currentMonth > 0) {
-            calendar.set(Calendar.MONTH, currentMonth - 1);
-        } else {
-            calendar.set(Calendar.MONTH, 11);
-            calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) - 1);
-        }
+        mCalendarTo = Calendar.getInstance();
+        mCalendarFrom = Calendar.getInstance();
+        setDataToView.setText(DateUtils.formatDate(this, mCalendarTo.getTimeInMillis()));
+        int currentYear = mCalendarTo.get(Calendar.YEAR);
+        mCalendarFrom.set(Calendar.YEAR, currentYear - 1);
 
-        setDataFromView.setText(DateUtils.formatDate(this, calendar.getTimeInMillis()));
+        setDataFromView.setText(DateUtils.formatDate(this, mCalendarFrom.getTimeInMillis()));
     }
 
 
@@ -92,61 +91,34 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_report, container, false);
-            TextView textView = rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
-    }
-
-    /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            switch (position) {
+                case 0:
+                    return ReportRefuelingFragment.newInstance(mCurrentVehicleId,
+                            mCalendarFrom.getTimeInMillis(),
+                            mCalendarTo.getTimeInMillis());
+                case 1:
+                    return null;
+                case 2:
+                    return null;
+                default:
+                    return null;
+            }
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            return 1;
         }
     }
 }

@@ -97,11 +97,9 @@
     <string name="description_date_in_toolbar_from">from</string>
     <string name="description_date_in_toolbar_to">to</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_report">ReportActivity</string>
-    <string name="tab_text_1">Tab 1</string>
+
+    <string name="title_activity_report">Reports</string>
+    <string name="tab_text_1">Refueling</string>
     <string name="tab_text_2">Tab 2</string>
     <string name="tab_text_3">Tab 3</string>
-    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

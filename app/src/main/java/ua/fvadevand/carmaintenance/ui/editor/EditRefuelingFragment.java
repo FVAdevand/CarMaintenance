@@ -456,7 +456,7 @@ public class EditRefuelingFragment extends Fragment
             return;
         }
 
-        if (mLastRefueling != null && mCalendar.getTimeInMillis() < mLastRefueling.getTimeStamp()) {
+        if (mLastRefueling != null && mCalendar.getTimeInMillis() < mLastRefueling.getTimestamp()) {
             mDateView.setError("Incorrect date");
             return;
         }
@@ -481,7 +481,7 @@ public class EditRefuelingFragment extends Fragment
 
         mCurrentRefueling.setBrandFuel(mFuelBrandSpinner.getSelectedItem().toString());
         mCurrentRefueling.setGasStation(mGasStationSpinner.getSelectedItem().toString());
-        mCurrentRefueling.setTimeStamp(mCalendar.getTimeInMillis());
+        mCurrentRefueling.setTimestamp(mCalendar.getTimeInMillis());
         mCurrentRefueling.setOdometer(odometer);
         mCurrentRefueling.setCost(price);
         mCurrentRefueling.setVolume(volume);

@@ -83,7 +83,7 @@ public class RefuelingFragment extends Fragment
 
             @Override
             protected void onBindViewHolder(@NonNull RefuelingViewHolder holder, int position, @NonNull Refueling model) {
-                String date = DateUtils.formatDate(RefuelingFragment.this.getContext(), model.getTimeStamp());
+                String date = DateUtils.formatDate(RefuelingFragment.this.getContext(), model.getTimestamp());
                 holder.mDateView.setText(date);
                 holder.mCoastView.setText(TextFormatUtils.costFormat(model.getCost()));
                 holder.mOdometerView.setText(TextFormatUtils.odometerFormat(model.getOdometer()));
