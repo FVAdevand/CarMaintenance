@@ -5,18 +5,27 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.vladimir.graphexample.utilities.DateAxisValueFormatter;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -27,7 +36,10 @@ import java.util.List;
 import ua.fvadevand.carmaintenance.R;
 import ua.fvadevand.carmaintenance.firebase.FirebaseRefueling;
 import ua.fvadevand.carmaintenance.firebase.model.Refueling;
+import ua.fvadevand.carmaintenance.reports.DateAxisValueFormatter;
+import ua.fvadevand.carmaintenance.reports.ReportMarkerView;
 import ua.fvadevand.carmaintenance.reports.ReportRefuelingCalculator;
+import ua.fvadevand.carmaintenance.utilities.TextFormatUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -87,9 +99,9 @@ public class ReportRefuelingFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        fetchRefuelingList();
 
         initViews(view);
+        fetchRefuelingList();
     }
 
     private void fetchRefuelingList() {
@@ -103,7 +115,37 @@ public class ReportRefuelingFragment extends Fragment {
                         }
                         mReportRefuelingCalculator = new ReportRefuelingCalculator(refuelingList,
                                 mTimestampFrom, mTimestampTo);
-                        showFuelVolumeChart();
+                        showLineChart(mFuelVolumeChart,
+                                mReportRefuelingCalculator.getFuelVolumeList(),
+                                "Fuel volume",
+                                getResources().getColor(R.color.colorChart1));
+
+                        showLineChart(mFuelCostChart,
+                                mReportRefuelingCalculator.getFuelCostList(),
+                                "Fuel cost",
+                                getResources().getColor(R.color.colorChart2));
+
+                        showLineChart(mFuelPriceUnitChart,
+                                mReportRefuelingCalculator.getFuelPriceUnitList(),
+                                "Fuel price unit",
+                                getResources().getColor(R.color.colorChart3));
+
+                        showLineChart(mFuelRateChart,
+                                mReportRefuelingCalculator.getFuelRateList(),
+                                "Fuel rate",
+                                getResources().getColor(R.color.colorChart4));
+
+                        showPieChart(mGasStationPieChart,
+                                mReportRefuelingCalculator.getGasStationList(),
+                                "Gas station",
+                                ColorTemplate.JOYFUL_COLORS,
+                                TextFormatUtils.volumeFormat(mReportRefuelingCalculator.getFullFuelVolume()));
+
+                        showPieChart(mFuelBrandPieChart,
+                                mReportRefuelingCalculator.getFuelBrandList(),
+                                "Fuel brand",
+                                ColorTemplate.MATERIAL_COLORS,
+                                TextFormatUtils.volumeFormat(mReportRefuelingCalculator.getFullFuelVolume()));
                     }
 
                     @Override
@@ -122,27 +164,81 @@ public class ReportRefuelingFragment extends Fragment {
         mFuelBrandPieChart = v.findViewById(R.id.pch_fuel_brand);
     }
 
-    private void showFuelVolumeChart() {
-        if (mReportRefuelingCalculator.getFuelVolumeList().size() == 0) return;
+    private void showLineChart(LineChart lineChart, List<Entry> entryList, String label, int fillColor) {
+        if (entryList.size() == 0) return;
 
-        Log.i(LOG_TAG, "showFuelVolumeChart: " + mReportRefuelingCalculator.getFuelVolumeList().size());
-
-        LineDataSet lineDataSet = new LineDataSet(mReportRefuelingCalculator.getFuelVolumeList(), "Fuel volume");
+        LineDataSet lineDataSet = new LineDataSet(entryList, label);
         lineDataSet.setValueTextSize(10f);
+        lineDataSet.setDrawFilled(true);
+        lineDataSet.setFillColor(fillColor);
+        lineDataSet.setColor(getResources().getColor(R.color.colorLineChart));
+        lineDataSet.setCircleColor(getResources().getColor(R.color.colorLineChart));
+        lineDataSet.setValueFormatter(new IValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                return TextFormatUtils.decimalFormat(value);
+            }
+        });
 
         LineData lineData = new LineData(lineDataSet);
 
-        Description description = mFuelVolumeChart.getDescription();
-        description.setText("Fuel volume");
-        description.setTextSize(10f);
+        Description description = lineChart.getDescription();
+        description.setText(label);
+        description.setTextSize(12f);
 
-        XAxis xAxis = mFuelVolumeChart.getXAxis();
+        XAxis xAxis = lineChart.getXAxis();
         xAxis.setValueFormatter(new DateAxisValueFormatter("MM/yy"));
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setLabelRotationAngle(-45f);
+        xAxis.setDrawGridLines(false);
 
-        mFuelVolumeChart.setData(lineData);
-        mFuelVolumeChart.getLegend().setEnabled(false);
-        mFuelVolumeChart.invalidate();
+        YAxis leftAxis = lineChart.getAxisLeft();
+        leftAxis.setDrawGridLines(false);
+        leftAxis.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return TextFormatUtils.decimalFormat(value);
+            }
+        });
+
+        YAxis rightAxis = lineChart.getAxisRight();
+        rightAxis.setEnabled(false);
+
+        lineChart.setData(lineData);
+        lineChart.getLegend().setEnabled(false);
+        lineChart.setMarker(new ReportMarkerView(getContext(), R.layout.report_marker));
+        lineChart.invalidate();
+    }
+
+    private void showPieChart(PieChart pieChart, List<PieEntry> pieEntryList, String label, int[] colors, String centerText) {
+        if (pieEntryList.size() == 0) return;
+
+        PieDataSet pieDataSet = new PieDataSet(pieEntryList, label);
+        pieDataSet.setColors(colors);
+        pieDataSet.setSliceSpace(2f);
+        pieDataSet.setValueTextSize(14f);
+        pieDataSet.setValueFormatter(new IValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                return TextFormatUtils.percentFormat(value);
+            }
+        });
+
+        PieData pieData = new PieData(pieDataSet);
+
+        pieChart.setData(pieData);
+        pieChart.getDescription().setEnabled(false);
+        pieChart.setEntryLabelColor(getResources().getColor(android.R.color.primary_text_light));
+        pieChart.setCenterText(centerText);
+        pieChart.setCenterTextSize(14f);
+
+        Legend legend = pieChart.getLegend();
+        legend.setOrientation(Legend.LegendOrientation.VERTICAL);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        legend.setTextSize(12f);
+
+        pieChart.invalidate();
     }
 
 }

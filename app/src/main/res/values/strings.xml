@@ -13,10 +13,11 @@
     <string name="nav_action_vehicles">Vehicles</string>
     <string name="nav_action_refueling">Refueling</string>
     <string name="nav_action_fuel_price">Fuel price</string>
+    <string name="nav_action_reports">Reports</string>
 
 
     <!--DateUtils-->
-    <string name="formatter_date">dd/MM/yy</string>
+    <string name="formatter_date">dd-MM-yy</string>
 
     <!--pref currency-->
     <string name="hryvnia" translatable="false">UAH|₴</string>
@@ -99,7 +100,7 @@
 
 
     <string name="title_activity_report">Reports</string>
-    <string name="tab_text_1">Refueling</string>
-    <string name="tab_text_2">Tab 2</string>
-    <string name="tab_text_3">Tab 3</string>
+    <string name="report_tab_text_1">Refueling</string>
+    <string name="report_tab_text_2">Tab 2</string>
+    <string name="report_tab_text_3">Tab 3</string>
 </resources>

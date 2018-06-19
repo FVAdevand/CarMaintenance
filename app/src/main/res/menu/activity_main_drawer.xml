@@ -19,7 +19,7 @@
         <item
             android:id="@+id/nav_report"
             android:icon="@drawable/ic_report_24"
-            android:title="Tools" />
+            android:title="@string/nav_action_reports" />
     </group>
 
     <item android:title="Communicate">

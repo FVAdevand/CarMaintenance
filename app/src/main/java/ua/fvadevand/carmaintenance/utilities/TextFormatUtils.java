@@ -43,4 +43,16 @@ public class TextFormatUtils {
         String numberDecimalStr = String.format(Locale.getDefault(), "%.2f", numberDecimal);
         return numberDecimalStr.replace(",", ".");
     }
+
+    public static String decimalFormat(double numberDecimal) {
+        if (numberDecimal > 100) {
+            return String.format(Locale.getDefault(), "%.0f", numberDecimal);
+        }
+        return String.format(Locale.getDefault(), "%.1f", numberDecimal);
+    }
+
+    public static String percentFormat(double value) {
+        String formatterStr = "%,.0f %%";
+        return String.format(Locale.getDefault(), formatterStr, value);
+    }
 }

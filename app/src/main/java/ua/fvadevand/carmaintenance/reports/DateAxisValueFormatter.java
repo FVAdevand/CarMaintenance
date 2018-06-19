@@ -1,4 +1,4 @@
-package com.example.vladimir.graphexample.utilities;
+package ua.fvadevand.carmaintenance.reports;
 
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;

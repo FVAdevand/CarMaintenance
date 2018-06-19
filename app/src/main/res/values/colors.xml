@@ -9,4 +9,15 @@
     <color name="colorDrawablePrimary">#000000</color>
     <color name="colorDrawableSecondary">#808080</color>
     <color name="colorDrawableToolbar">#EEEEEE</color>
+
+    <!--chart-->
+    <color name="colorChart1">#90CAF9</color>
+    <color name="colorChart2">#B39DDB</color>
+    <color name="colorChart3">#80DEEA</color>
+    <color name="colorChart4">#E6EE9C</color>
+    <color name="colorChart5">#FFCC80</color>
+
+    <color name="colorLineChart">#000000</color>
+
+    <color name="colorBackgroundChart">#E0F7FA</color>
 </resources>
