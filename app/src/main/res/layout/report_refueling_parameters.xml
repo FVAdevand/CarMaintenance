@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    android:columnCount="2">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_report_refueling_total_distance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:hint="@string/report_refueling_total_distance" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_report_refueling_total_fuel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:hint="@string/report_refueling_total_fuel" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_report_refueling_total_cost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:hint="@string/report_refueling_total_cost" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_report_refueling_total_refueling"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:hint="@string/report_refueling_total_refueling" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_report_refueling_average_fuel_rate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:hint="@string/report_refueling_average_fuel_rate" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_report_refueling_average_fuel_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:hint="@string/report_refueling_average_fuel_price" />
+    </android.support.design.widget.TextInputLayout>
+
+</GridLayout>

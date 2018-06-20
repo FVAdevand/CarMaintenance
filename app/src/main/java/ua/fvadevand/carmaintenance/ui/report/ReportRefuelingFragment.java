@@ -1,6 +1,7 @@
 package ua.fvadevand.carmaintenance.ui.report;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -46,7 +48,8 @@ import ua.fvadevand.carmaintenance.utilities.TextFormatUtils;
  * Use the {@link ReportRefuelingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ReportRefuelingFragment extends Fragment {
+public class ReportRefuelingFragment extends Fragment
+        implements ReportActivity.OnDateChangeListener {
 
     private static final String LOG_TAG = ReportRefuelingFragment.class.getSimpleName();
 
@@ -66,6 +69,12 @@ public class ReportRefuelingFragment extends Fragment {
     private PieChart mFuelBrandPieChart;
 
     private ReportRefuelingCalculator mReportRefuelingCalculator;
+    private EditText mTotalDistanceView;
+    private EditText mTotalFuelView;
+    private EditText mTotalCostView;
+    private EditText mAverageFuelRateView;
+    private EditText mAverageFuelPriceView;
+    private EditText mTotalRefuelingView;
 
     public ReportRefuelingFragment() {
     }
@@ -115,37 +124,9 @@ public class ReportRefuelingFragment extends Fragment {
                         }
                         mReportRefuelingCalculator = new ReportRefuelingCalculator(refuelingList,
                                 mTimestampFrom, mTimestampTo);
-                        showLineChart(mFuelVolumeChart,
-                                mReportRefuelingCalculator.getFuelVolumeList(),
-                                "Fuel volume",
-                                getResources().getColor(R.color.colorChart1));
 
-                        showLineChart(mFuelCostChart,
-                                mReportRefuelingCalculator.getFuelCostList(),
-                                "Fuel cost",
-                                getResources().getColor(R.color.colorChart2));
-
-                        showLineChart(mFuelPriceUnitChart,
-                                mReportRefuelingCalculator.getFuelPriceUnitList(),
-                                "Fuel price unit",
-                                getResources().getColor(R.color.colorChart3));
-
-                        showLineChart(mFuelRateChart,
-                                mReportRefuelingCalculator.getFuelRateList(),
-                                "Fuel rate",
-                                getResources().getColor(R.color.colorChart4));
-
-                        showPieChart(mGasStationPieChart,
-                                mReportRefuelingCalculator.getGasStationList(),
-                                "Gas station",
-                                ColorTemplate.JOYFUL_COLORS,
-                                TextFormatUtils.volumeFormat(mReportRefuelingCalculator.getFullFuelVolume()));
-
-                        showPieChart(mFuelBrandPieChart,
-                                mReportRefuelingCalculator.getFuelBrandList(),
-                                "Fuel brand",
-                                ColorTemplate.MATERIAL_COLORS,
-                                TextFormatUtils.volumeFormat(mReportRefuelingCalculator.getFullFuelVolume()));
+                        displayChart();
+                        displayParameters();
                     }
 
                     @Override
@@ -162,6 +143,31 @@ public class ReportRefuelingFragment extends Fragment {
         mFuelRateChart = v.findViewById(R.id.lch_fuel_rate);
         mGasStationPieChart = v.findViewById(R.id.pch_gas_station);
         mFuelBrandPieChart = v.findViewById(R.id.pch_fuel_brand);
+
+        mTotalDistanceView = v.findViewById(R.id.et_report_refueling_total_distance);
+        disableEditText(mTotalDistanceView);
+
+        mTotalFuelView = v.findViewById(R.id.et_report_refueling_total_fuel);
+        disableEditText(mTotalFuelView);
+
+        mTotalCostView = v.findViewById(R.id.et_report_refueling_total_cost);
+        disableEditText(mTotalCostView);
+
+        mTotalRefuelingView = v.findViewById(R.id.et_report_refueling_total_refueling);
+        disableEditText(mTotalRefuelingView);
+
+        mAverageFuelRateView = v.findViewById(R.id.et_report_refueling_average_fuel_rate);
+        disableEditText(mAverageFuelRateView);
+
+        mAverageFuelPriceView = v.findViewById(R.id.et_report_refueling_average_fuel_price);
+        disableEditText(mAverageFuelPriceView);
+
+    }
+
+    private void disableEditText(EditText editText) {
+        editText.setEnabled(false);
+        editText.setTextColor(Color.BLACK);
+        editText.clearFocus();
     }
 
     private void showLineChart(LineChart lineChart, List<Entry> entryList, String label, int fillColor) {
@@ -241,4 +247,56 @@ public class ReportRefuelingFragment extends Fragment {
         pieChart.invalidate();
     }
 
+    @Override
+    public void onDateSetFrom(long timestamp) {
+        mReportRefuelingCalculator.setTimestampFrom(timestamp);
+        displayChart();
+        displayParameters();
+    }
+
+    @Override
+    public void onDateSetTo(long timestamp) {
+        mReportRefuelingCalculator.setTimestampTo(timestamp);
+        displayChart();
+        displayParameters();
+    }
+
+    private void displayChart() {
+        showLineChart(mFuelVolumeChart,
+                mReportRefuelingCalculator.getFuelVolumeList(),
+                "Fuel volume",
+                getResources().getColor(R.color.colorChart1));
+
+        showLineChart(mFuelCostChart,
+                mReportRefuelingCalculator.getFuelCostList(),
+                "Fuel cost",
+                getResources().getColor(R.color.colorChart2));
+
+        showLineChart(mFuelPriceUnitChart,
+                mReportRefuelingCalculator.getFuelPriceUnitList(),
+                "Fuel price unit",
+                getResources().getColor(R.color.colorChart3));
+
+        showLineChart(mFuelRateChart,
+                mReportRefuelingCalculator.getFuelRateList(),
+                "Fuel rate",
+                getResources().getColor(R.color.colorChart4));
+
+        showPieChart(mGasStationPieChart,
+                mReportRefuelingCalculator.getGasStationList(),
+                "Gas station",
+                ColorTemplate.JOYFUL_COLORS,
+                TextFormatUtils.volumeFormat(mReportRefuelingCalculator.getTotalFuelVolume()));
+
+        showPieChart(mFuelBrandPieChart,
+                mReportRefuelingCalculator.getFuelBrandList(),
+                "Fuel brand",
+                ColorTemplate.MATERIAL_COLORS,
+                TextFormatUtils.volumeFormat(mReportRefuelingCalculator.getTotalFuelVolume()));
+    }
+
+    private void displayParameters() {
+        mTotalFuelView.setText(TextFormatUtils.volumeFormat(mReportRefuelingCalculator.getTotalFuelVolume()));
+        mTotalCostView.setText(TextFormatUtils.costFormat(mReportRefuelingCalculator.getTotalFuelCost()));
+    }
 }

@@ -18,7 +18,9 @@ public class ReportRefuelingCalculator {
     private List<Refueling> mRefuelingList;
     private long mTimestampFrom;
     private long mTimestampTo;
-    private double mFullFuelVolume;
+    private double mTotalFuelVolume;
+    private double mTotalFuelCost;
+    private int mTotalDistance;
 
     private List<Entry> mFuelVolumeList;
     private List<Entry> mFuelCostList;
@@ -94,8 +96,12 @@ public class ReportRefuelingCalculator {
         return mFuelBrandList;
     }
 
-    public double getFullFuelVolume() {
-        return mFullFuelVolume;
+    public double getTotalFuelVolume() {
+        return mTotalFuelVolume;
+    }
+
+    public double getTotalFuelCost() {
+        return mTotalFuelCost;
     }
 
     public void notifyDataSetChanged() {
@@ -104,6 +110,7 @@ public class ReportRefuelingCalculator {
         correctLastFuelRate();
 
         for (Refueling refueling : mRefuelingList) {
+
             if (refueling.getTimestamp() >= mTimestampFrom && refueling.getTimestamp() <= mTimestampTo) {
                 calcFuelVolume(refueling);
                 calcFuelCostList(refueling);
@@ -111,12 +118,16 @@ public class ReportRefuelingCalculator {
                 calcFuelRateList(refueling);
                 calcGasStationMap(refueling);
                 calcFuelBrandMap(refueling);
-                calcFullFuelVolume(refueling);
+                calcTotalFuelVolume(refueling);
+                calcTotalFuelCost(refueling);
             }
         }
-
         calcGasStationList();
         calcFuelBrandList();
+//        calcTotalDistance();
+//        calcTotalRefueling();
+//        calcAverageFuelRate();
+//        calcAverageFuelPrice();
     }
 
     private void correctLastFuelRate() {
@@ -135,11 +146,16 @@ public class ReportRefuelingCalculator {
         mFuelBrandList.clear();
         mGasStationMap.clear();
         mFuelBrandMap.clear();
-        mFullFuelVolume = 0;
+        mTotalFuelVolume = 0;
+        mTotalFuelCost = 0;
     }
 
-    private void calcFullFuelVolume(Refueling refueling) {
-        mFullFuelVolume += refueling.getVolume();
+    private void calcTotalFuelVolume(Refueling refueling) {
+        mTotalFuelVolume += refueling.getVolume();
+    }
+
+    private void calcTotalFuelCost(Refueling refueling) {
+        mTotalFuelCost += refueling.getCost();
     }
 
     private void calcFuelVolume(Refueling refueling) {
@@ -193,6 +209,6 @@ public class ReportRefuelingCalculator {
     }
 
     private double getPercentVolume(double fuelVolume) {
-        return fuelVolume / mFullFuelVolume * 100;
+        return fuelVolume / mTotalFuelVolume * 100;
     }
 }

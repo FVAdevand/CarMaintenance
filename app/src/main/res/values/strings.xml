@@ -103,4 +103,10 @@
     <string name="report_tab_text_1">Refueling</string>
     <string name="report_tab_text_2">Tab 2</string>
     <string name="report_tab_text_3">Tab 3</string>
+    <string name="report_refueling_total_distance">Total distance</string>
+    <string name="report_refueling_total_fuel">Total fuel</string>
+    <string name="report_refueling_total_cost">Total cost</string>
+    <string name="report_refueling_total_refueling">Total refueling</string>
+    <string name="report_refueling_average_fuel_rate">Average fuel rate</string>
+    <string name="report_refueling_average_fuel_price">Average fuel price</string>
 </resources>
