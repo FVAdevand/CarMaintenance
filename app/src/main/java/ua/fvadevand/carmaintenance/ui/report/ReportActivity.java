@@ -2,6 +2,7 @@ package ua.fvadevand.carmaintenance.ui.report;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,11 +27,13 @@ import ua.fvadevand.carmaintenance.utilities.DateUtils;
 public class ReportActivity extends AppCompatActivity
         implements DatePickerDialog.OnDateSetListener {
 
-//    public static final int DATE_FROM = 0;
-//    public static final int DATE_TO = 0;
+    private static final String LOG_TAG = ReportActivity.class.getSimpleName();
 
-    private static final int SHOWN_DATE_DIALOG_FROM = 0;
-    private static final int SHOWN_DATE_DIALOG_TO = 1;
+    private static final String KEY_TIMESTAMP_FROM = "TIMESTAMP_FROM";
+    private static final String KEY_TIMESTAMP_TO = "TIMESTAMP_TO";
+
+    private static final int ID_DATE_DIALOG_FROM = 0;
+    private static final int ID_DATE_DIALOG_TO = 1;
 
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -38,16 +42,14 @@ public class ReportActivity extends AppCompatActivity
     private Calendar mCalendarFrom;
     private Calendar mCalendarTo;
 
-    private int mShownDateDialog;
-
-    private OnDateChangeListener mListener;
+    private int mCurrentDateDialogId;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private TextView mSetDataFromView;
-    private TextView mSetDataToView;
+    private TextView mSetDateFromView;
+    private TextView mSetDateToView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,59 +75,114 @@ public class ReportActivity extends AppCompatActivity
 
         mCurrentVehicleId = ShPrefManager.getCurrentVehicleId(this);
 
-        mSetDataFromView = findViewById(R.id.tv_date_from);
-        mSetDataToView = findViewById(R.id.tv_date_to);
+        mSetDateFromView = findViewById(R.id.tv_date_from);
+        mSetDateToView = findViewById(R.id.tv_date_to);
+
         mCalendarTo = Calendar.getInstance();
         mCalendarFrom = Calendar.getInstance();
-        displayDateTo();
-        int currentYear = mCalendarTo.get(Calendar.YEAR);
-        mCalendarFrom.set(Calendar.YEAR, currentYear - 1);
-        displayDateFrom();
 
-        mSetDataFromView.setOnClickListener(new View.OnClickListener() {
+        if (savedInstanceState != null) {
+            mCalendarFrom.setTimeInMillis(savedInstanceState.getLong(KEY_TIMESTAMP_FROM));
+            mCalendarTo.setTimeInMillis(savedInstanceState.getLong(KEY_TIMESTAMP_TO));
+        } else {
+            int currentYear = mCalendarTo.get(Calendar.YEAR);
+            mCalendarFrom.set(Calendar.YEAR, currentYear - 1);
+        }
+
+        displayDate(mSetDateFromView, mCalendarFrom);
+        displayDate(mSetDateToView, mCalendarTo);
+
+        mSetDateFromView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mShownDateDialog = SHOWN_DATE_DIALOG_FROM;
-                showDatePickerDialog(mCalendarFrom.getTimeInMillis());
+                showDatePickerDialog(mCalendarFrom.getTimeInMillis(), ID_DATE_DIALOG_FROM);
             }
         });
 
-        mSetDataToView.setOnClickListener(new View.OnClickListener() {
+        mSetDateToView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mShownDateDialog = SHOWN_DATE_DIALOG_TO;
-                showDatePickerDialog(mCalendarTo.getTimeInMillis());
+                showDatePickerDialog(mCalendarTo.getTimeInMillis(), ID_DATE_DIALOG_TO);
             }
         });
     }
 
-    private void showDatePickerDialog(long timeInMillis) {
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(KEY_TIMESTAMP_FROM, mCalendarFrom.getTimeInMillis());
+        outState.putLong(KEY_TIMESTAMP_TO, mCalendarTo.getTimeInMillis());
+    }
+
+    private void showDatePickerDialog(long timeInMillis, int id) {
+        mCurrentDateDialogId = id;
         DatePickerDialogFragment fragment = DatePickerDialogFragment.newInstance(timeInMillis);
         fragment.show(getSupportFragmentManager(), "DatePicker");
     }
 
-    private void displayDateFrom() {
-        mSetDataFromView.setText(DateUtils.formatDate(this, mCalendarFrom.getTimeInMillis()));
-    }
-
-    private void displayDateTo() {
-        mSetDataToView.setText(DateUtils.formatDate(this, mCalendarTo.getTimeInMillis()));
+    private void displayDate(TextView view, Calendar calendar) {
+        view.setText(DateUtils.formatDate(this, calendar.getTimeInMillis()));
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        if (mShownDateDialog == SHOWN_DATE_DIALOG_FROM) {
-            mCalendarFrom.set(year, month, dayOfMonth);
-            displayDateFrom();
-            if (mListener != null) {
-                mListener.onDateSetFrom(mCalendarFrom.getTimeInMillis());
-            }
+        switch (mCurrentDateDialogId) {
+            case ID_DATE_DIALOG_FROM:
+                if (isValidDateFrom(year, month, dayOfMonth)) {
+                    changeDateFrom(year, month, dayOfMonth);
+                } else {
+                    showSnackBar("Date \"from\" must precede " + DateUtils.formatDate(this, mCalendarTo.getTimeInMillis()));
+                }
+                break;
+            case ID_DATE_DIALOG_TO:
+                if (isValidDateTo(year, month, dayOfMonth)) {
+                    changeDateTo(year, month, dayOfMonth);
+                } else {
+                    showSnackBar("Date \"to\" must be after " + DateUtils.formatDate(this, mCalendarFrom.getTimeInMillis()));
+                }
+                break;
+            default:
+                Log.i(LOG_TAG, "onDateSet: unknown date picker");
+        }
+    }
+
+    private void showSnackBar(String message) {
+        Snackbar.make(mViewPager, message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    private void changeDateFrom(int year, int month, int dayOfMonth) {
+        mCalendarFrom.set(year, month, dayOfMonth);
+        displayDate(mSetDateFromView, mCalendarFrom);
+        getFragment().changeDateFrom(mCalendarFrom.getTimeInMillis());
+    }
+
+    private void changeDateTo(int year, int month, int dayOfMonth) {
+        mCalendarTo.set(year, month, dayOfMonth);
+        displayDate(mSetDateToView, mCalendarTo);
+        getFragment().changeDateTo(mCalendarTo.getTimeInMillis());
+    }
+
+    private boolean isValidDateFrom(int year, int month, int dayOfMonth) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, dayOfMonth);
+        return mCalendarTo.after(calendar);
+    }
+
+    private boolean isValidDateTo(int year, int month, int dayOfMonth) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, dayOfMonth);
+        return mCalendarFrom.before(calendar);
+    }
+
+    private DateChanging getFragment() {
+        Fragment fragment = (Fragment) mSectionsPagerAdapter
+                .instantiateItem(mViewPager, mViewPager.getCurrentItem());
+
+        if (fragment instanceof DateChanging) {
+            return (DateChanging) fragment;
         } else {
-            mCalendarTo.set(year, month, dayOfMonth);
-            displayDateTo();
-            if (mListener != null) {
-                mListener.onDateSetTo(mCalendarTo.getTimeInMillis());
-            }
+            throw new RuntimeException(fragment.toString()
+                    + " must implement DateChanging");
         }
     }
 
@@ -147,10 +204,10 @@ public class ReportActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public interface OnDateChangeListener {
-        void onDateSetFrom(long timestamp);
+    public interface DateChanging {
+        void changeDateFrom(long timestamp);
 
-        void onDateSetTo(long timestamp);
+        void changeDateTo(long timestamp);
     }
 
     /**
@@ -167,12 +224,9 @@ public class ReportActivity extends AppCompatActivity
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    ReportRefuelingFragment fragment = ReportRefuelingFragment.newInstance(mCurrentVehicleId,
+                    return ReportRefuelingFragment.newInstance(mCurrentVehicleId,
                             mCalendarFrom.getTimeInMillis(),
                             mCalendarTo.getTimeInMillis());
-                    mListener = fragment;
-                    return fragment;
-
                 case 1:
                     return null;
                 case 2:

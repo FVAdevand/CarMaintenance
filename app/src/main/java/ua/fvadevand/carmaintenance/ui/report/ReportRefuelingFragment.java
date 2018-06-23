@@ -49,7 +49,7 @@ import ua.fvadevand.carmaintenance.utilities.TextFormatUtils;
  * create an instance of this fragment.
  */
 public class ReportRefuelingFragment extends Fragment
-        implements ReportActivity.OnDateChangeListener {
+        implements ReportActivity.DateChanging {
 
     private static final String LOG_TAG = ReportRefuelingFragment.class.getSimpleName();
 
@@ -171,7 +171,13 @@ public class ReportRefuelingFragment extends Fragment
     }
 
     private void showLineChart(LineChart lineChart, List<Entry> entryList, String label, int fillColor) {
-        if (entryList.size() == 0) return;
+        lineChart.setNoDataText("Empty chart");
+
+        if (entryList.size() == 0) {
+            lineChart.clear();
+            lineChart.invalidate();
+            return;
+        }
 
         LineDataSet lineDataSet = new LineDataSet(entryList, label);
         lineDataSet.setValueTextSize(10f);
@@ -248,14 +254,22 @@ public class ReportRefuelingFragment extends Fragment
     }
 
     @Override
-    public void onDateSetFrom(long timestamp) {
+    public void changeDateFrom(long timestamp) {
+        mTimestampFrom = timestamp;
+        if (getArguments() != null) {
+            getArguments().putLong(ARG_TIMESTAMP_FROM, mTimestampFrom);
+        }
         mReportRefuelingCalculator.setTimestampFrom(timestamp);
         displayChart();
         displayParameters();
     }
 
     @Override
-    public void onDateSetTo(long timestamp) {
+    public void changeDateTo(long timestamp) {
+        mTimestampTo = timestamp;
+        if (getArguments() != null) {
+            getArguments().putLong(ARG_TIMESTAMP_TO, mTimestampTo);
+        }
         mReportRefuelingCalculator.setTimestampTo(timestamp);
         displayChart();
         displayParameters();
