@@ -60,7 +60,7 @@
         android:layout_height="wrap_content">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/et_vehicle_initial_odometr"
+            android:id="@+id/et_vehicle_initial_odometer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Initial odometer"

@@ -3,8 +3,6 @@ package ua.fvadevand.carmaintenance.ui.editor;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,7 +13,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,6 +30,7 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -100,7 +98,7 @@ public class EditVehicleFragment extends Fragment
 
         mManufacturerView = view.findViewById(R.id.et_vehicle_manufacturer);
         mModelView = view.findViewById(R.id.et_edit_refueling_odometer);
-        mInitialOdometerView = view.findViewById(R.id.et_vehicle_initial_odometr);
+        mInitialOdometerView = view.findViewById(R.id.et_vehicle_initial_odometer);
         mYearManufacturerView = view.findViewById(R.id.et_vehicle_year_manufacture);
 
         mEditTextList = new ArrayList<>();
@@ -190,7 +188,11 @@ public class EditVehicleFragment extends Fragment
             case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
                 CropImage.ActivityResult result = CropImage.getActivityResult(data);
                 mPhotoVehicleUri = result.getUri();
-                setPic(mToolbarImageView, mPhotoVehicleUri.getEncodedPath());
+                GlideApp.with(this)
+                        .load(mPhotoVehicleUri.getEncodedPath())
+                        .signature(new MediaStoreSignature("image/jpeg", Calendar.getInstance().getTimeInMillis(), 0))
+                        .centerCrop()
+                        .into(mToolbarImageView);
                 break;
         }
     }
@@ -263,28 +265,6 @@ public class EditVehicleFragment extends Fragment
                     .setAspectRatio(18, 10)
                     .start(getContext(), this);
         }
-    }
-
-    private void setPic(ImageView view, String imagePath) {
-
-        int targetW = view.getWidth();
-        int targetH = view.getHeight();
-
-        Log.i(LOG_TAG, "setPic: W=" + targetW + " H=" + targetH);
-
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(imagePath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath, bmOptions);
-        view.setImageBitmap(bitmap);
     }
 
     private void deleteVehicle() {

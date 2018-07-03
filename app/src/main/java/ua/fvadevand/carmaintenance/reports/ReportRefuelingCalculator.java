@@ -20,7 +20,12 @@ public class ReportRefuelingCalculator {
     private long mTimestampTo;
     private double mTotalFuelVolume;
     private double mTotalFuelCost;
+    private int mOdometerStart;
+    private int mOdometerEnd;
     private int mTotalDistance;
+    private int mNumberRefueling;
+    private double mAverageFuelRate;
+    private double mAverageFuelPrice;
 
     private List<Entry> mFuelVolumeList;
     private List<Entry> mFuelCostList;
@@ -104,6 +109,22 @@ public class ReportRefuelingCalculator {
         return mTotalFuelCost;
     }
 
+    public int getTotalDistance() {
+        return mTotalDistance;
+    }
+
+    public int getNumberRefueling() {
+        return mNumberRefueling;
+    }
+
+    public double getAverageFuelRate() {
+        return mAverageFuelRate;
+    }
+
+    public double getAverageFuelPrice() {
+        return mAverageFuelPrice;
+    }
+
     public void notifyDataSetChanged() {
         clearData();
 
@@ -112,6 +133,10 @@ public class ReportRefuelingCalculator {
         for (Refueling refueling : mRefuelingList) {
 
             if (refueling.getTimestamp() >= mTimestampFrom && refueling.getTimestamp() <= mTimestampTo) {
+                if (mNumberRefueling == 0) {
+                    mOdometerStart = refueling.getOdometer();
+                }
+                mOdometerEnd = refueling.getOdometer();
                 calcFuelVolume(refueling);
                 calcFuelCostList(refueling);
                 calcFuelPriceUnitList(refueling);
@@ -120,14 +145,15 @@ public class ReportRefuelingCalculator {
                 calcFuelBrandMap(refueling);
                 calcTotalFuelVolume(refueling);
                 calcTotalFuelCost(refueling);
+
+                mNumberRefueling++;
             }
         }
         calcGasStationList();
         calcFuelBrandList();
-//        calcTotalDistance();
-//        calcTotalRefueling();
-//        calcAverageFuelRate();
-//        calcAverageFuelPrice();
+        calcTotalDistance();
+        calcAverageFuelRate();
+        calcAverageFuelPrice();
     }
 
     private void correctLastFuelRate() {
@@ -148,6 +174,12 @@ public class ReportRefuelingCalculator {
         mFuelBrandMap.clear();
         mTotalFuelVolume = 0;
         mTotalFuelCost = 0;
+        mOdometerStart = 0;
+        mOdometerEnd = 0;
+        mTotalDistance = 0;
+        mNumberRefueling = 0;
+        mAverageFuelRate = 0;
+        mAverageFuelPrice = 0;
     }
 
     private void calcTotalFuelVolume(Refueling refueling) {
@@ -206,6 +238,18 @@ public class ReportRefuelingCalculator {
             mFuelBrandList.add(
                     new PieEntry((float) getPercentVolume(mFuelBrandMap.valueAt(i)), mFuelBrandMap.keyAt(i)));
         }
+    }
+
+    private void calcTotalDistance() {
+        mTotalDistance = mOdometerEnd - mOdometerStart;
+    }
+
+    private void calcAverageFuelRate() {
+        mAverageFuelRate = mTotalFuelVolume / mTotalDistance * 100;
+    }
+
+    private void calcAverageFuelPrice() {
+        mAverageFuelPrice = mTotalFuelCost / mTotalDistance;
     }
 
     private double getPercentVolume(double fuelVolume) {

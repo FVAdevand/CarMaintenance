@@ -70,7 +70,7 @@ public class FuelPriceFragment extends Fragment {
         RecyclerView fuelPriceList = v.findViewById(R.id.rv_fuel_price_list);
         fuelPriceList.setLayoutManager(new LinearLayoutManager(v.getContext()));
         fuelPriceList.setHasFixedSize(true);
-        mFuelAdapter = new FuelAdapter(mFuelList);
+        mFuelAdapter = new FuelAdapter(getContext().getApplicationContext(), mFuelList);
         fuelPriceList.setAdapter(mFuelAdapter);
 
         Spinner regionSpinner = v.findViewById(R.id.spinner_region);

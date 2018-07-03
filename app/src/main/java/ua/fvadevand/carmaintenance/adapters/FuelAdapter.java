@@ -1,5 +1,6 @@
 package ua.fvadevand.carmaintenance.adapters;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,9 +17,11 @@ import ua.fvadevand.carmaintenance.utilities.TextFormatUtils;
 public class FuelAdapter extends RecyclerView.Adapter<FuelAdapter.FuelViewHolder> {
 
     private List<Fuel> mFuelList;
+    private TextFormatUtils mFormatUtils;
 
-    public FuelAdapter(List<Fuel> fuelList) {
+    public FuelAdapter(Context context, List<Fuel> fuelList) {
         mFuelList = fuelList;
+        mFormatUtils = new TextFormatUtils(context);
     }
 
     @NonNull
@@ -33,7 +36,7 @@ public class FuelAdapter extends RecyclerView.Adapter<FuelAdapter.FuelViewHolder
     public void onBindViewHolder(@NonNull FuelViewHolder holder, int position) {
         Fuel fuel = mFuelList.get(position);
         holder.mTypeView.setText(fuel.getType());
-        holder.mPriceView.setText(TextFormatUtils.priceUnitFormat(fuel.getPrice()));
+        holder.mPriceView.setText(mFormatUtils.priceUnitFormat(fuel.getPrice()));
     }
 
     @Override

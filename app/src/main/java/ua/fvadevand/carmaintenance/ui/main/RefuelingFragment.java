@@ -41,6 +41,7 @@ public class RefuelingFragment extends Fragment
     private OnClickRefuelingItemListener mListener;
     private String mCurrentVehicleId;
     private RecyclerView mRefuelingListView;
+    private TextFormatUtils mFormatUtils;
 
     public RefuelingFragment() {
     }
@@ -58,6 +59,8 @@ public class RefuelingFragment extends Fragment
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mFormatUtils = new TextFormatUtils(getContext().getApplicationContext());
         mCurrentVehicleId = ShPrefManager.getCurrentVehicleId(view.getContext());
 
         mRefuelingListView = view.findViewById(R.id.refueling_list);
@@ -85,13 +88,13 @@ public class RefuelingFragment extends Fragment
             protected void onBindViewHolder(@NonNull RefuelingViewHolder holder, int position, @NonNull Refueling model) {
                 String date = DateUtils.formatDate(RefuelingFragment.this.getContext(), model.getTimestamp());
                 holder.mDateView.setText(date);
-                holder.mCoastView.setText(TextFormatUtils.costFormat(model.getCost()));
-                holder.mOdometerView.setText(TextFormatUtils.odometerFormat(model.getOdometer()));
-                holder.mFuelRateView.setText(TextFormatUtils.fuelRateFormat(model.getFuelRate()));
-                holder.mVolumeView.setText(TextFormatUtils.volumeFormat(model.getVolume()));
+                holder.mCoastView.setText(mFormatUtils.costFormat(model.getCost()));
+                holder.mOdometerView.setText(mFormatUtils.odometerFormat(model.getOdometer()));
+                holder.mFuelRateView.setText(mFormatUtils.fuelRateFormat(model.getFuelRate()));
+                holder.mVolumeView.setText(mFormatUtils.volumeFormat(model.getVolume()));
                 holder.mGasStationView.setText(model.getGasStation());
                 holder.mBrandFuelView.setText(model.getBrandFuel());
-                holder.mPriceUnitView.setText(TextFormatUtils.priceUnitFormat(model.getPriceUnit()));
+                holder.mPriceUnitView.setText(mFormatUtils.priceUnitFormat(model.getPriceUnit()));
             }
 
             @NonNull

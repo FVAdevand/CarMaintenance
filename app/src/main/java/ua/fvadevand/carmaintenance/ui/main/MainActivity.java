@@ -88,6 +88,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_refueling);
+        showRefuelingFragment();
 
         View headerView = navigationView.getHeaderView(0);
         mBackgroundNavBar = headerView.findViewById(R.id.iv_background_main_nav_bar);
@@ -194,9 +196,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_report:
                 startActivity(new Intent(this, ReportActivity.class));
                 break;
-            case R.id.nav_share:
-                break;
-            case R.id.nav_send:
+            case R.id.nav_settings:
                 break;
         }
 

@@ -16,16 +16,18 @@ public class ReportMarkerView extends MarkerView {
 
     private TextView mTextView;
     private MPPointF mOffset;
+    private TextFormatUtils mFormatUtils;
 
     public ReportMarkerView(Context context, int layoutResource) {
         super(context, layoutResource);
 
         mTextView = findViewById(R.id.tv_marker);
+        mFormatUtils = new TextFormatUtils(context);
     }
 
     @Override
     public void refreshContent(Entry e, Highlight highlight) {
-        mTextView.setText(TextFormatUtils.decimalFormat(e.getY()) + "\n" + DateUtils.formatDate(getContext(), (long) e.getX()));
+        mTextView.setText(mFormatUtils.decimalFormat(e.getY()) + "\n" + DateUtils.formatDate(getContext(), (long) e.getX()));
         super.refreshContent(e, highlight);
     }
 

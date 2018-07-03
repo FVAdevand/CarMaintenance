@@ -16,6 +16,7 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -56,6 +57,7 @@ public class ReportRefuelingFragment extends Fragment
     private static final String ARG_CURRENT_VEHICLE_ID = "current_vehicle_id";
     private static final String ARG_TIMESTAMP_FROM = "timestamp_from";
     private static final String ARG_TIMESTAMP_TO = "timestamp_to";
+    private static final int NO_LIMIT_LINE = -1;
 
     private String mCurrentVehicleId;
     private long mTimestampFrom;
@@ -75,6 +77,8 @@ public class ReportRefuelingFragment extends Fragment
     private EditText mAverageFuelRateView;
     private EditText mAverageFuelPriceView;
     private EditText mTotalRefuelingView;
+
+    private TextFormatUtils mFormatUtils;
 
     public ReportRefuelingFragment() {
     }
@@ -109,6 +113,7 @@ public class ReportRefuelingFragment extends Fragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mFormatUtils = new TextFormatUtils(getContext().getApplicationContext());
         initViews(view);
         fetchRefuelingList();
     }
@@ -170,7 +175,7 @@ public class ReportRefuelingFragment extends Fragment
         editText.clearFocus();
     }
 
-    private void showLineChart(LineChart lineChart, List<Entry> entryList, String label, int fillColor) {
+    private void showLineChart(LineChart lineChart, List<Entry> entryList, String label, int fillColor, float averageLimit) {
         lineChart.setNoDataText("Empty chart");
 
         if (entryList.size() == 0) {
@@ -188,7 +193,7 @@ public class ReportRefuelingFragment extends Fragment
         lineDataSet.setValueFormatter(new IValueFormatter() {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                return TextFormatUtils.decimalFormat(value);
+                return mFormatUtils.decimalFormat(value);
             }
         });
 
@@ -209,9 +214,16 @@ public class ReportRefuelingFragment extends Fragment
         leftAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return TextFormatUtils.decimalFormat(value);
+                return mFormatUtils.decimalFormat(value);
             }
         });
+
+        leftAxis.removeAllLimitLines();
+
+        if (averageLimit > 0) {
+            LimitLine limitLine = new LimitLine(averageLimit);
+            leftAxis.addLimitLine(limitLine);
+        }
 
         YAxis rightAxis = lineChart.getAxisRight();
         rightAxis.setEnabled(false);
@@ -232,7 +244,7 @@ public class ReportRefuelingFragment extends Fragment
         pieDataSet.setValueFormatter(new IValueFormatter() {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                return TextFormatUtils.percentFormat(value);
+                return mFormatUtils.percentFormat(value);
             }
         });
 
@@ -279,38 +291,46 @@ public class ReportRefuelingFragment extends Fragment
         showLineChart(mFuelVolumeChart,
                 mReportRefuelingCalculator.getFuelVolumeList(),
                 "Fuel volume",
-                getResources().getColor(R.color.colorChart1));
+                getResources().getColor(R.color.colorChart1),
+                NO_LIMIT_LINE);
 
         showLineChart(mFuelCostChart,
                 mReportRefuelingCalculator.getFuelCostList(),
                 "Fuel cost",
-                getResources().getColor(R.color.colorChart2));
+                getResources().getColor(R.color.colorChart2),
+                NO_LIMIT_LINE);
 
         showLineChart(mFuelPriceUnitChart,
                 mReportRefuelingCalculator.getFuelPriceUnitList(),
                 "Fuel price unit",
-                getResources().getColor(R.color.colorChart3));
+                getResources().getColor(R.color.colorChart3),
+                NO_LIMIT_LINE);
 
         showLineChart(mFuelRateChart,
                 mReportRefuelingCalculator.getFuelRateList(),
                 "Fuel rate",
-                getResources().getColor(R.color.colorChart4));
+                getResources().getColor(R.color.colorChart4),
+                (float) mReportRefuelingCalculator.getAverageFuelRate());
 
         showPieChart(mGasStationPieChart,
                 mReportRefuelingCalculator.getGasStationList(),
                 "Gas station",
                 ColorTemplate.JOYFUL_COLORS,
-                TextFormatUtils.volumeFormat(mReportRefuelingCalculator.getTotalFuelVolume()));
+                mFormatUtils.volumeFormat(mReportRefuelingCalculator.getTotalFuelVolume()));
 
         showPieChart(mFuelBrandPieChart,
                 mReportRefuelingCalculator.getFuelBrandList(),
                 "Fuel brand",
                 ColorTemplate.MATERIAL_COLORS,
-                TextFormatUtils.volumeFormat(mReportRefuelingCalculator.getTotalFuelVolume()));
+                mFormatUtils.volumeFormat(mReportRefuelingCalculator.getTotalFuelVolume()));
     }
 
     private void displayParameters() {
-        mTotalFuelView.setText(TextFormatUtils.volumeFormat(mReportRefuelingCalculator.getTotalFuelVolume()));
-        mTotalCostView.setText(TextFormatUtils.costFormat(mReportRefuelingCalculator.getTotalFuelCost()));
+        mTotalFuelView.setText(mFormatUtils.volumeFormat(mReportRefuelingCalculator.getTotalFuelVolume()));
+        mTotalCostView.setText(mFormatUtils.costFormat(mReportRefuelingCalculator.getTotalFuelCost()));
+        mTotalDistanceView.setText(mFormatUtils.odometerFormat(mReportRefuelingCalculator.getTotalDistance()));
+        mTotalRefuelingView.setText(String.valueOf(mReportRefuelingCalculator.getNumberRefueling()));
+        mAverageFuelRateView.setText(mFormatUtils.fuelRateFormat(mReportRefuelingCalculator.getAverageFuelRate()));
+        mAverageFuelPriceView.setText(mFormatUtils.priceDistanceFormat(mReportRefuelingCalculator.getAverageFuelPrice()));
     }
 }

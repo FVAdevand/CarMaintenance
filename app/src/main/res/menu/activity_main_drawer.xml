@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/nav_group_main"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_vehicle"
             android:icon="@drawable/ic_car_front_24"
@@ -12,27 +14,42 @@
             android:id="@+id/nav_refueling"
             android:icon="@drawable/ic_fuel_station_24"
             android:title="@string/nav_action_refueling" />
+
         <item
-            android:id="@+id/nav_fuel_price"
-            android:icon="@drawable/ic_fuel_price_24"
-            android:title="@string/nav_action_fuel_price" />
+            android:id="@+id/nav_parking"
+            android:icon="@drawable/ic_parking_24"
+            android:title="@string/nav_action_parking" />
+
+        <item
+            android:id="@+id/nav_service"
+            android:icon="@drawable/ic_service_24"
+            android:title="@string/nav_action_service" />
+
         <item
             android:id="@+id/nav_report"
             android:icon="@drawable/ic_report_24"
             android:title="@string/nav_action_reports" />
+
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
-        </menu>
-    </item>
+    <group
+        android:id="@+id/nav_group_services"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_fuel_price"
+            android:icon="@drawable/ic_fuel_price_24"
+            android:title="@string/nav_action_fuel_price" />
+    </group>
+
+    <group
+        android:id="@+id/nav_group_settings"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings_24dp"
+            android:title="@string/nav_action_settings" />
+    </group>
 
 </menu>

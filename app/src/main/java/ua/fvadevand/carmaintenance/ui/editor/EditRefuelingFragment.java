@@ -81,6 +81,7 @@ public class EditRefuelingFragment extends Fragment
     private EditText mFuelBalanceView;
     private ArrayAdapter<String> mFuelBrandAdapter;
     private ArrayAdapter<String> mGasStationAdapter;
+    private TextFormatUtils mFormatUtils;
 
     public EditRefuelingFragment() {
     }
@@ -111,6 +112,7 @@ public class EditRefuelingFragment extends Fragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mFormatUtils = new TextFormatUtils(getContext().getApplicationContext());
         initView(view);
         addTextChangeListener();
         fetchLastRefueling();
@@ -347,10 +349,10 @@ public class EditRefuelingFragment extends Fragment
 
                 if (!volumeStr.isEmpty() && mCalculationModePrice == MAIN_VOLUME) {
                     double volume = Double.parseDouble(volumeStr);
-                    mPriceUnitView.setText(TextFormatUtils.decimalFormatWithDot(price / volume));
+                    mPriceUnitView.setText(mFormatUtils.decimalFormatWithDot(price / volume));
                 } else if (!priceUnitStr.isEmpty() && mCalculationModePrice == MAIN_PRICE_UNIT) {
                     double priceUnit = Double.parseDouble(priceUnitStr);
-                    mVolumeView.setText(TextFormatUtils.decimalFormatWithDot(price / priceUnit));
+                    mVolumeView.setText(mFormatUtils.decimalFormatWithDot(price / priceUnit));
                 }
             }
 
@@ -379,10 +381,10 @@ public class EditRefuelingFragment extends Fragment
 
                 if (!priceStr.isEmpty() && mCalculationModePrice == MAIN_PRICE) {
                     double price = Double.parseDouble(priceStr);
-                    mPriceUnitView.setText(TextFormatUtils.decimalFormatWithDot(price / volume));
+                    mPriceUnitView.setText(mFormatUtils.decimalFormatWithDot(price / volume));
                 } else if (!priceUnitStr.isEmpty() && mCalculationModePrice == MAIN_PRICE_UNIT) {
                     double priceUnit = Double.parseDouble(priceUnitStr);
-                    mPriceView.setText(TextFormatUtils.decimalFormatWithDot(volume * priceUnit));
+                    mPriceView.setText(mFormatUtils.decimalFormatWithDot(volume * priceUnit));
                 }
             }
 
@@ -411,10 +413,10 @@ public class EditRefuelingFragment extends Fragment
 
                 if (!priceStr.isEmpty() && mCalculationModePrice == MAIN_PRICE) {
                     double price = Double.parseDouble(priceStr);
-                    mVolumeView.setText(TextFormatUtils.decimalFormatWithDot(price / priceUnit));
+                    mVolumeView.setText(mFormatUtils.decimalFormatWithDot(price / priceUnit));
                 } else if (!volumeStr.isEmpty() && mCalculationModePrice == MAIN_VOLUME) {
                     double volume = Double.parseDouble(volumeStr);
-                    mPriceView.setText(TextFormatUtils.decimalFormatWithDot(volume * priceUnit));
+                    mPriceView.setText(mFormatUtils.decimalFormatWithDot(volume * priceUnit));
                 }
             }
 
